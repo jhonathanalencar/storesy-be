@@ -1,10 +1,10 @@
-import { ListProductsByCategory } from '../../application/usecase/ListProductsByCategory';
+import { GetProductsByCategory } from '../../application/usecase/GetProductsByCategory';
 import { HttpServer } from '../http/HttpServer';
 
 export class MainController {
   constructor(
     readonly httpServer: HttpServer,
-    readonly listProductsByCategory: ListProductsByCategory
+    readonly getProductsByCategory: GetProductsByCategory
   ) {
     this.httpServer.on(
       'get',
@@ -14,7 +14,7 @@ export class MainController {
         body: unknown,
         headers: unknown
       ) {
-        const output = await listProductsByCategory.execute(params.category);
+        const output = await getProductsByCategory.execute(params.category);
         return output;
       }
     );

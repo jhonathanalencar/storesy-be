@@ -12,7 +12,7 @@ describe('Get Product UseCase', () => {
   });
 
   test('Should be able to get product', async () => {
-    const products = await productsRepository.getByCategory('Headphones');
+    const products = await productsRepository.getByCategory('headphones');
     const productData = products[0];
     const outputProduct = await getProduct.execute(productData.productId);
     expect(outputProduct.productId).toBeDefined();

@@ -6,14 +6,14 @@ describe('Product Entity', () => {
       'Product Name',
       'Product Description',
       9600,
-      ['Technology'],
+      ['technology'],
       'https://product.image.com'
     );
     expect(product.productId).toBeDefined();
     expect(product.name).toBe('Product Name');
     expect(product.description).toBe('Product Description');
     expect(product.summary).toBeDefined();
-    expect(product.categories).toEqual(['Technology']);
+    expect(product.categories).toEqual(['technology']);
     expect(product.imageUrl).toBe('https://product.image.com');
     expect(product.price).toBe(9600);
     expect(product.getReleaseDate()).toBeUndefined();
@@ -24,7 +24,7 @@ describe('Product Entity', () => {
       'Product Name',
       'Product Description',
       9600,
-      ['Technology'],
+      ['technology'],
       'https://product.image.com'
     );
     product.release();

@@ -1,10 +1,12 @@
 import { ProductsRepository } from '../repository/ProductsRepository';
 
-export class ListProductsByCategory {
+export class GetProductsByCategory {
   constructor(readonly productsRepository: ProductsRepository) {}
 
   async execute(category: string): Promise<Output> {
-    const productsData = await this.productsRepository.getByCategory(category);
+    const productsData = await this.productsRepository.getByCategory(
+      category.toLowerCase()
+    );
     const products = [];
     for (const product of productsData) {
       products.push({
