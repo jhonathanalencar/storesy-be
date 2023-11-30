@@ -25,9 +25,11 @@ describe('List Products By Category UseCase', () => {
     const products = await listProductsByCategory.execute('Headphones');
     const getProduct = new GetProduct(productsRepository);
     let product = await getProduct.execute(products[0].productId);
+    expect(product.releaseDate).not.toBeDefined();
     const releaseProduct = new ReleaseProduct(productsRepository);
     await releaseProduct.execute(product.productId);
     product = await getProduct.execute(products[0].productId);
     expect(product.releaseDate).toBeDefined();
+    expect(product.releaseDate).toBeInstanceOf(Date);
   });
 });
