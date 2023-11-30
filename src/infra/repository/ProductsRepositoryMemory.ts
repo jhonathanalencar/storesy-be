@@ -30,13 +30,45 @@ export class ProductsRepositoryMemory implements ProductsRepository {
     ];
   }
 
+  async update(product: Product): Promise<void> {
+    const newProducts = this.products.map((productData) => {
+      if (productData.productId === product.productId) {
+        return product;
+      }
+      return productData;
+    });
+    return new Promise((resolve) => {
+      this.products = newProducts;
+      resolve();
+    });
+  }
+
   async getByCategory(category: string): Promise<Product[]> {
     const filteredProducts = this.products.filter((product) =>
       product.categories.includes(category)
     );
-
     return new Promise((resolve) => {
       resolve(filteredProducts);
+    });
+  }
+
+  async getById(id: string): Promise<Product> {
+    const foundProduct = this.products.find(
+      (product) => product.productId === id
+    );
+    if (!foundProduct) throw new Error('Product not found!');
+    const product = new Product(
+      foundProduct.productId,
+      foundProduct.name,
+      foundProduct.description,
+      foundProduct.summary,
+      foundProduct.price,
+      foundProduct.categories,
+      foundProduct.imageUrl,
+      foundProduct.getReleaseDate()
+    );
+    return new Promise((resolve) => {
+      resolve(product);
     });
   }
 }

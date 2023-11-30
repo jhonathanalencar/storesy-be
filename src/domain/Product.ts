@@ -12,8 +12,12 @@ export class Product {
     private releaseDate?: Date
   ) {}
 
-  private release() {
+  release() {
     this.releaseDate = new Date();
+  }
+
+  getReleaseDate() {
+    return this.releaseDate;
   }
 
   static create(
