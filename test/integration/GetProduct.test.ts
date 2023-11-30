@@ -1,6 +1,6 @@
-import { ProductsRepository } from '../src/application/repository/ProductsRepository';
-import { GetProduct } from '../src/application/usecase/GetProduct';
-import { ProductsRepositoryMemory } from '../src/infra/repository/ProductsRepositoryMemory';
+import { ProductsRepository } from '../../src/application/repository/ProductsRepository';
+import { GetProduct } from '../../src/application/usecase/GetProduct';
+import { ProductsRepositoryMemory } from '../../src/infra/repository/ProductsRepositoryMemory';
 
 describe('Get Product UseCase', () => {
   let getProduct: GetProduct;

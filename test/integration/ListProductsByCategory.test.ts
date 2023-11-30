@@ -1,8 +1,8 @@
-import { ProductsRepository } from '../src/application/repository/ProductsRepository';
-import { GetProduct } from '../src/application/usecase/GetProduct';
-import { ListProductsByCategory } from '../src/application/usecase/ListProductsByCategory';
-import { ReleaseProduct } from '../src/application/usecase/ReleaseProduct';
-import { ProductsRepositoryMemory } from '../src/infra/repository/ProductsRepositoryMemory';
+import { ProductsRepository } from '../../src/application/repository/ProductsRepository';
+import { GetProduct } from '../../src/application/usecase/GetProduct';
+import { ListProductsByCategory } from '../../src/application/usecase/ListProductsByCategory';
+import { ReleaseProduct } from '../../src/application/usecase/ReleaseProduct';
+import { ProductsRepositoryMemory } from '../../src/infra/repository/ProductsRepositoryMemory';
 
 describe('List Products By Category UseCase', () => {
   let listProductsByCategory: ListProductsByCategory;
