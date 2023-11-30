@@ -28,7 +28,10 @@ export class Product {
     imageUrl: string
   ) {
     const productId = crypto.randomUUID();
-    const summary = description.substring(0, 100);
+    const summary =
+      description.length < 100
+        ? description
+        : `${description.substring(0, 100)}...`;
     return new Product(
       productId,
       name,

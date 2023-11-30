@@ -1,0 +1,30 @@
+@category = headphones
+
+# @name getProductsByCategory
+GET http://localhost:3333/{{category}}
+
+###
+
+@productId = {{getProductsByCategory.response.body.$[0].productId}}
+
+# @name get-product-by-id
+GET http://localhost:3333/products/{{productId}}
+
+###
+
+# @name add-product
+POST http://localhost:3333/products
+Content-Type: application/json
+
+{
+  "name": "product name",
+  "description": "product description",
+  "price": 9600,
+  "categories": ["headphones"],
+  "imageUrl": "https://localhost:3333"
+}
+
+###
+
+# @name release-product
+POST http://localhost:3333/products/{{productId}}

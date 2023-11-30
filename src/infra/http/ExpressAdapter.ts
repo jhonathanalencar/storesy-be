@@ -7,6 +7,7 @@ export class ExpressAdapter implements HttpServer {
 
   constructor() {
     this.app = express();
+    this.app.use(express.json());
   }
 
   on(method: string, url: string, callback: Function): void {

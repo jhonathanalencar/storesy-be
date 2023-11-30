@@ -16,6 +16,7 @@ export class GetProductsByCategory {
         summary: product.summary,
         categories: product.categories,
         imageUrl: product.imageUrl,
+        releaseDate: product.getReleaseDate(),
       });
     }
     return products;
