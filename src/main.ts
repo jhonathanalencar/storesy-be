@@ -5,6 +5,7 @@ import { ReleaseProduct } from './application/usecase/ReleaseProduct';
 import { MainController } from './infra/controller/MainController';
 import { ExpressAdapter } from './infra/http/ExpressAdapter';
 import { ProductsRepositoryMemory } from './infra/repository/ProductsRepositoryMemory';
+import { ErrorHandler } from './application/errors/ErrorHandler';
 
 const httpServer = new ExpressAdapter();
 const productsRepository = new ProductsRepositoryMemory();
@@ -19,4 +20,5 @@ new MainController(
   addProduct,
   releaseProduct
 );
+new ErrorHandler(httpServer);
 httpServer.listen(3333);
