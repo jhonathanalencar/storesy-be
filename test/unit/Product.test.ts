@@ -9,14 +9,19 @@ describe('Product Entity', () => {
       ['technology'],
       'https://product.image.com'
     );
-    expect(product.productId).toBeDefined();
+    expect(product.product_id).toBeDefined();
     expect(product.name).toBe('Product Name');
+    expect(product.slug).toBe('product-name');
     expect(product.description).toBe('Product Description');
     expect(product.summary).toBeDefined();
     expect(product.categories).toEqual(['technology']);
-    expect(product.imageUrl).toBe('https://product.image.com');
+    expect(product.image_url).toBe('https://product.image.com');
     expect(product.price).toBe(9600);
-    expect(product.getReleaseDate()).toBeUndefined();
+    expect(product.is_deal).toBe(false);
+    expect(product.discount_percent).toBe(0);
+    expect(product.created_at).toBeDefined();
+    expect(product.updated_at).toBeDefined();
+    expect(product.getReleasedDate()).toBeUndefined();
   });
 
   test('Should be able to release a product', () => {
@@ -28,7 +33,7 @@ describe('Product Entity', () => {
       'https://product.image.com'
     );
     product.release();
-    expect(product.getReleaseDate()).toBeDefined();
-    expect(product.getReleaseDate()).toBeInstanceOf(Date);
+    expect(product.getReleasedDate()).toBeDefined();
+    expect(product.getReleasedDate()).toBeInstanceOf(Date);
   });
 });

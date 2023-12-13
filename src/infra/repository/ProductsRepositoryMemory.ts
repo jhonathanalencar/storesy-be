@@ -39,7 +39,7 @@ export class ProductsRepositoryMemory implements ProductsRepository {
 
   async update(product: Product): Promise<void> {
     const newProducts = this.products.map((productData) => {
-      if (productData.productId === product.productId) {
+      if (productData.product_id === product.product_id) {
         return product;
       }
       return productData;
@@ -61,18 +61,24 @@ export class ProductsRepositoryMemory implements ProductsRepository {
 
   async getById(id: string): Promise<Product> {
     const foundProduct = this.products.find(
-      (product) => product.productId === id
+      (product) => product.product_id === id
     );
     if (!foundProduct) throw new Error('Product not found!');
     const product = new Product(
-      foundProduct.productId,
+      foundProduct.product_id,
       foundProduct.name,
+      foundProduct.slug,
       foundProduct.description,
       foundProduct.summary,
       foundProduct.price,
       foundProduct.categories,
-      foundProduct.imageUrl,
-      foundProduct.getReleaseDate()
+      foundProduct.image_url,
+      foundProduct.is_deal,
+      foundProduct.discount_percent,
+      foundProduct.quantity_available,
+      foundProduct.created_at,
+      foundProduct.updated_at,
+      foundProduct.getReleasedDate()
     );
     return new Promise((resolve) => {
       resolve(product);

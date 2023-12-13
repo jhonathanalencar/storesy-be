@@ -10,13 +10,13 @@ export class GetProductsByCategory {
     const products = [];
     for (const product of productsData) {
       products.push({
-        productId: product.productId,
+        productId: product.product_id,
         name: product.name,
         price: product.price,
         summary: product.summary,
         categories: product.categories,
-        imageUrl: product.imageUrl,
-        releaseDate: product.getReleaseDate(),
+        imageUrl: product.image_url,
+        releaseDate: product.getReleasedDate(),
       });
     }
     return products;

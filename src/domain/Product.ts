@@ -1,23 +1,33 @@
 import crypto from 'node:crypto';
 
+import { Rate } from './Rate';
+
 export class Product {
+  ratings: Rate[];
+
   constructor(
-    readonly productId: string,
+    readonly product_id: string,
     readonly name: string,
+    readonly slug: string,
     readonly description: string,
     readonly summary: string,
     readonly price: number,
     readonly categories: string[],
-    readonly imageUrl: string,
-    private releaseDate?: Date
+    readonly image_url: string,
+    readonly is_deal: boolean,
+    readonly discount_percent: number,
+    readonly quantity_available: number,
+    readonly created_at: Date,
+    readonly updated_at: Date,
+    private released_date?: Date
   ) {}
 
   release() {
-    this.releaseDate = new Date();
+    this.released_date = new Date();
   }
 
-  getReleaseDate() {
-    return this.releaseDate;
+  getReleasedDate() {
+    return this.released_date;
   }
 
   static create(
@@ -25,21 +35,29 @@ export class Product {
     description: string,
     price: number,
     categories: string[],
-    imageUrl: string
+    image_url: string
   ) {
-    const productId = crypto.randomUUID();
+    const product_id = crypto.randomUUID();
+    const slug = name.toLowerCase().split(' ').join('-');
     const summary =
       description.length < 100
         ? description
         : `${description.substring(0, 100)}...`;
+    const currentDate = new Date();
     return new Product(
-      productId,
+      product_id,
       name,
+      slug,
       description,
       summary,
       price,
       categories,
-      imageUrl
+      image_url,
+      false,
+      0,
+      0,
+      currentDate,
+      currentDate
     );
   }
 }
