@@ -1,4 +1,4 @@
-import { Product } from '../../domain/Product';
+import { Product } from '../../domain/entity/Product';
 import { ProductsRepository } from '../repository/ProductsRepository';
 
 export class AddProduct {
@@ -10,10 +10,12 @@ export class AddProduct {
       input.description,
       input.price,
       input.categories,
-      input.image_url
+      input.imageUrl,
+      input.quantity,
+      input.discountId
     );
     await this.productsRepository.save(newProduct);
-    return { productId: newProduct.product_id };
+    return { productId: newProduct.productId };
   }
 }
 
@@ -22,7 +24,9 @@ export type Input = {
   description: string;
   price: number;
   categories: string[];
-  image_url: string;
+  imageUrl: string;
+  quantity: number;
+  discountId?: string;
 };
 
 export type Output = {

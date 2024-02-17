@@ -1,33 +1,31 @@
 import { ProductsRepository } from '../repository/ProductsRepository';
-
-export class GetProductsByCategory {
+export class ListAllProducts {
   constructor(readonly productsRepository: ProductsRepository) {}
 
-  async execute(category: string): Promise<Output> {
-    const productsData = await this.productsRepository.getByCategory(
-      category.toLowerCase()
-    );
-    const products = [];
-    for (const product of productsData) {
-      products.push({
+  async execute(): Promise<Output> {
+    const products = await this.productsRepository.listAll();
+    return products.map((product) => {
+      return {
         productId: product.productId,
         name: product.name,
+        description: product.description,
         price: product.price,
-        summary: product.summary,
         categories: product.categories,
         imageUrl: product.imageUrl,
-        releaseDate: product.getReleasedDate(),
-      });
-    }
-    return products;
+        quantity: product.quantity,
+        releasedDate: product.getReleasedDate(),
+      };
+    });
   }
 }
 
 export type Output = {
   productId: string;
   name: string;
+  description: string;
   price: number;
-  summary: string;
   categories: string[];
   imageUrl: string;
+  quantity: number;
+  releasedDate: Date | undefined;
 }[];

@@ -6,23 +6,25 @@ export class GetProduct {
   async execute(productId: string): Promise<Output> {
     const product = await this.productsRepository.getById(productId);
     return {
-      product_id: product.product_id,
+      productId: product.productId,
       name: product.name,
       description: product.description,
       price: product.price,
+      quantity: product.quantity,
       categories: product.categories,
-      image_url: product.image_url,
-      released_date: product.getReleasedDate(),
+      imageUrl: product.imageUrl,
+      releasedDate: product.getReleasedDate(),
     };
   }
 }
 
 export type Output = {
-  product_id: string;
+  productId: string;
   name: string;
   description: string;
   price: number;
+  quantity: number;
   categories: string[];
-  image_url: string;
-  released_date: Date | undefined;
+  imageUrl: string;
+  releasedDate: Date | undefined;
 };

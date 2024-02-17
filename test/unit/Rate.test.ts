@@ -1,4 +1,4 @@
-import { Rate } from '../../src/domain/Rate';
+import { Rate } from '../../src/domain/entity/Rate';
 
 describe('Rate Entity', () => {
   test('Should be able to create a rate', () => {

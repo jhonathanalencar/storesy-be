@@ -1,7 +1,7 @@
 @category = headphones
 
 # @name getProductsByCategory
-GET http://localhost:3333/{{category}}
+GET http://localhost:3333/products/category/{{category}}
 
 ###
 
@@ -17,14 +17,38 @@ POST http://localhost:3333/products
 Content-Type: application/json
 
 {
-  "name": "product name",
+  "name": "product name 2",
   "description": "product description",
-  "price": 9600,
-  "categories": ["headphones"],
-  "image_url": "https://localhost:3333"
+  "price": 26.00,
+  "categories": ["d61ccf6d-b8f7-48a9-ba0e-a15b0050bfae"],
+  "imageUrl": "https://localhost:3333",
+  "quantity": 12,
+  "discountId": "e63d5eaa-dba7-4b5f-a4bd-3297a371a71c"
 }
 
 ###
 
-# @name release-product
-POST http://localhost:3333/products/{{productId}}
+# @name releaseProduct
+POST http://localhost:3333/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92/release
+
+###
+
+# @name updateProduct
+POST http://localhost:3333/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92
+Content-Type: application/json
+
+{
+  "name": "product name 2 updated",
+  "description": "product description updated",
+  "summary": "product description",
+  "price": 36.00,
+  "categories": ["d61ccf6d-b8f7-48a9-ba0e-a15b0050bfae"],
+  "imageUrl": "https://localhost:3333",
+  "quantity": 20,
+  "discountId": "e63d5eaa-dba7-4b5f-a4bd-3297a371a71c"
+}
+
+###
+
+# @name listProducts
+GET http://localhost:3333/products

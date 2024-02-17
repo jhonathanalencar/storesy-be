@@ -1,4 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
+import 'express-async-errors';
 
 import { HttpServer } from './HttpServer';
 
@@ -8,7 +10,6 @@ export class ExpressAdapter implements HttpServer {
   constructor() {
     this.app = express();
     this.app.use(express.json());
-    this.app.get('', (params, aaa, bbb) => {});
   }
 
   on(method: string, url: string, callback: Function): void {
