@@ -17,7 +17,13 @@ export class ExpressAdapter implements HttpServer {
     );
     this.app.get('^/$|/index(.html)?', (request, response) => {
       response.sendFile(
-        path.resolve(__dirname, '../..', 'views', 'index.html')
+        path.resolve(
+          __dirname,
+          '../../..',
+          'public/assets',
+          'views',
+          'index.html'
+        )
       );
     });
   }
@@ -50,7 +56,13 @@ export class ExpressAdapter implements HttpServer {
       response.status(404);
       if (request.accepts('html')) {
         response.sendFile(
-          path.resolve(__dirname, '../..', 'views', 'notFound.html')
+          path.resolve(
+            __dirname,
+            '../../..',
+            'public/assets',
+            'views',
+            'notFound.html'
+          )
         );
       } else if (request.accepts('json')) {
         response.json({ message: '404 Not Found' });
