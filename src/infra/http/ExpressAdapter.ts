@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import 'express-async-errors';
+import path from 'node:path';
 
 import { HttpServer } from './HttpServer';
 
@@ -10,6 +11,15 @@ export class ExpressAdapter implements HttpServer {
   constructor() {
     this.app = express();
     this.app.use(express.json());
+    this.app.use(
+      '/',
+      express.static(path.resolve(__dirname, '../../..', 'public'))
+    );
+    this.app.get('^/$|/index(.html)?', (request, response) => {
+      response.sendFile(
+        path.resolve(__dirname, '../..', 'views', 'index.html')
+      );
+    });
   }
 
   on(method: string, url: string, callback: Function): void {
@@ -33,6 +43,21 @@ export class ExpressAdapter implements HttpServer {
 
   use(handlers: any): void {
     this.app.use(handlers);
+  }
+
+  notFound() {
+    this.app.all('*', (request, response) => {
+      response.status(404);
+      if (request.accepts('html')) {
+        response.sendFile(
+          path.resolve(__dirname, '../..', 'views', 'notFound.html')
+        );
+      } else if (request.accepts('json')) {
+        response.json({ message: '404 Not Found' });
+      } else {
+        response.type('txt').send('404 Not Found');
+      }
+    });
   }
 
   listen(port: number): void {

@@ -12,7 +12,7 @@ import {
 } from '../../application/usecase/UpdateProduct';
 import { HttpServer } from '../http/HttpServer';
 
-export class MainController {
+export class ProductController {
   constructor(
     readonly httpServer: HttpServer,
     readonly getProductsByCategory: GetProductsByCategory,
@@ -92,7 +92,7 @@ export class MainController {
       }
     );
     this.httpServer.on(
-      'post',
+      'put',
       '/products/:id',
       async (
         params: { id: string },

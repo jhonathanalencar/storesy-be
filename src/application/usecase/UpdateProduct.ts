@@ -1,4 +1,5 @@
 import { Product } from '../../domain/entity/Product';
+import { NotFoundError } from '../errors/NotFound';
 import { ProductsRepository } from '../repository/ProductsRepository';
 
 export class UpdateProduct {
@@ -6,6 +7,7 @@ export class UpdateProduct {
 
   async execute(input: Input): Promise<void> {
     const product = await this.productsRepository.getById(input.productId);
+    if (!product) throw new NotFoundError('Product not found');
     const updatedProduct = Product.restore(
       input.productId,
       input.name,

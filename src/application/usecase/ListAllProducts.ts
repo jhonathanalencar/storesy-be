@@ -1,6 +1,6 @@
 import { ProductsRepository } from '../repository/ProductsRepository';
 export class ListAllProducts {
-  constructor(readonly productsRepository: ProductsRepository) {}
+  constructor(private readonly productsRepository: ProductsRepository) {}
 
   async execute(): Promise<Output> {
     const products = await this.productsRepository.listAll();

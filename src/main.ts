@@ -2,7 +2,6 @@ import { AddProduct } from './application/usecase/AddProduct';
 import { GetProduct } from './application/usecase/GetProduct';
 import { GetProductsByCategory } from './application/usecase/GetProductsByCategory';
 import { ReleaseProduct } from './application/usecase/ReleaseProduct';
-import { MainController } from './infra/controller/MainController';
 import { ExpressAdapter } from './infra/http/ExpressAdapter';
 import { ErrorHandler } from './application/errors/ErrorHandler';
 import { LoadEnv } from './infra/helpers/LoadEnv';
@@ -10,6 +9,7 @@ import { ProductsRepositoryDatabase } from './infra/repository/ProductsRepositor
 import { PgPromiseAdapter } from './infra/database/PgPromiseAdapter';
 import { ListAllProducts } from './application/usecase/ListAllProducts';
 import { UpdateProduct } from './application/usecase/UpdateProduct';
+import { ProductController } from './infra/controller/ProductController';
 
 LoadEnv.load();
 const httpServer = new ExpressAdapter();
@@ -21,7 +21,8 @@ const getProduct = new GetProduct(productsRepository);
 const addProduct = new AddProduct(productsRepository);
 const releaseProduct = new ReleaseProduct(productsRepository);
 const updateProduct = new UpdateProduct(productsRepository);
-new MainController(
+
+new ProductController(
   httpServer,
   getProductsByCategory,
   getProduct,
@@ -30,5 +31,6 @@ new MainController(
   listAllProducts,
   updateProduct
 );
+httpServer.notFound();
 new ErrorHandler(httpServer);
 httpServer.listen(3333);

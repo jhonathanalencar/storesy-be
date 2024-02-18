@@ -83,12 +83,13 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return products;
   }
 
-  async getById(id: string): Promise<Product> {
+  async getById(id: string): Promise<Product | undefined> {
     const productWithCategoryData: productsWithCategory[] =
       await this.connection.query(
         'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.product_category pc on pc.product_id = p.product_id inner join lak.category c on pc.category_id = c.category_id where p.product_id = $1',
         [id]
       );
+    if (productWithCategoryData.length === 0) return;
     const productData = productWithCategoryData.reduce(
       (acc, product) => {
         if (Object.keys(acc).length === 0) {
@@ -104,6 +105,7 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
       },
       {} as ProductModel & { categories: string[] }
     );
+
     const product = Product.restore(
       productData.product_id,
       productData.name,

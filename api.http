@@ -7,12 +7,12 @@ GET http://localhost:3333/products/category/{{category}}
 
 @productId = {{getProductsByCategory.response.body.$[0].productId}}
 
-# @name get-product-by-id
+# @name getProductById
 GET http://localhost:3333/products/{{productId}}
 
 ###
 
-# @name add-product
+# @name addProduct
 POST http://localhost:3333/products
 Content-Type: application/json
 
@@ -34,7 +34,7 @@ POST http://localhost:3333/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92/release
 ###
 
 # @name updateProduct
-POST http://localhost:3333/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92
+PUT http://localhost:3333/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92
 Content-Type: application/json
 
 {

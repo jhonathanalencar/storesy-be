@@ -4,6 +4,6 @@ export interface ProductsRepository {
   save(product: Product): Promise<void>;
   update(product: Product): Promise<void>;
   getByCategory(category: string): Promise<Product[]>;
-  getById(id: string): Promise<Product>;
+  getById(id: string): Promise<Product | undefined>;
   listAll(): Promise<Product[]>;
 }
