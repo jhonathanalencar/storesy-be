@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { Product } from '../../domain/entity/Product';
 import { ProductsRepository } from '../repository/ProductsRepository';
 
@@ -32,3 +34,18 @@ export type Input = {
 export type Output = {
   productId: string;
 };
+
+export const createProductBody = z.object({
+  name: z.string({ required_error: 'name is required' }).trim().min(1, 'name is required'),
+  description: z
+    .string({ required_error: 'description is required' })
+    .trim()
+    .min(1, 'description is required'),
+  price: z.number({ required_error: 'price is required' }),
+  categories: z
+    .array(z.string(), { required_error: 'categories is required' })
+    .length(1, 'categories is required'),
+  imageUrl: z.string({ required_error: 'imageUrl is required' }).url(),
+  quantity: z.number({ required_error: 'quantity is required' }).int(),
+  discountId: z.string().uuid('discountId is not a valid uuid').optional(),
+});

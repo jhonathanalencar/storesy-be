@@ -1,11 +1,18 @@
 import type { Request, Response } from 'express';
 
 import { ListAllProducts } from '../../application/usecase/ListAllProducts';
-import { AddProduct } from '../../application/usecase/AddProduct';
-import { GetProduct } from '../../application/usecase/GetProduct';
-import { GetProductsByCategory } from '../../application/usecase/GetProductsByCategory';
-import { ReleaseProduct } from '../../application/usecase/ReleaseProduct';
-import { UpdateProduct } from '../../application/usecase/UpdateProduct';
+import { AddProduct, createProductBody } from '../../application/usecase/AddProduct';
+import { GetProduct, getProductParams } from '../../application/usecase/GetProduct';
+import {
+  GetProductsByCategory,
+  getProductsByCategoryParams,
+} from '../../application/usecase/GetProductsByCategory';
+import { ReleaseProduct, releaseProductParams } from '../../application/usecase/ReleaseProduct';
+import {
+  UpdateProduct,
+  updateProductBody,
+  updateProductParams,
+} from '../../application/usecase/UpdateProduct';
 import { ProductController } from '../../application/controller/ProductController';
 
 export class ProductControllerHttp implements ProductController {
@@ -19,19 +26,19 @@ export class ProductControllerHttp implements ProductController {
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
-    const body = request.body;
+    const body = createProductBody.parse(request.body);
     const output = await this.addProduct.execute(body);
     response.status(201).json(output);
   }
 
   async getById(request: Request, response: Response): Promise<void> {
-    const { id } = request.params;
-    const output = await this.getProduct.execute(id);
+    const { productId } = getProductParams.parse(request.params);
+    const output = await this.getProduct.execute(productId);
     response.status(200).json(output);
   }
 
   async getByCategory(request: Request, response: Response): Promise<void> {
-    const { category } = request.params;
+    const { category } = getProductsByCategoryParams.parse(request.params);
     const output = await this.getProductsByCategory.execute(category);
     response.status(200).json(output);
   }
@@ -42,15 +49,15 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async update(request: Request, response: Response): Promise<void> {
-    const body = request.body;
-    const { id } = request.params;
-    await this.updateProduct.execute({ ...body, productId: id });
+    const { productId } = updateProductParams.parse(request.params);
+    const body = updateProductBody.parse(request.body);
+    await this.updateProduct.execute({ ...body, productId });
     response.status(204).send();
   }
 
   async release(request: Request, response: Response): Promise<void> {
-    const { id } = request.params;
-    await this.releaseProduct.execute(id);
+    const { productId } = releaseProductParams.parse(request.params);
+    await this.releaseProduct.execute(productId);
     response.status(204).send();
   }
 }

@@ -1,19 +1,19 @@
 @category = headphones
 
 # @name getProductsByCategory
-GET http://localhost:3333/products/category/{{category}}
+GET http://localhost:3333/api/products/category/{{category}}
 
 ###
 
 @productId = {{getProductsByCategory.response.body.$[0].productId}}
 
 # @name getProductById
-GET http://localhost:3333/products/{{productId}}
+GET http://localhost:3333/api/products/{{productId}}
 
 ###
 
 # @name addProduct
-POST http://localhost:3333/products
+POST http://localhost:3333/api/products
 Content-Type: application/json
 
 {
@@ -29,12 +29,12 @@ Content-Type: application/json
 ###
 
 # @name releaseProduct
-POST http://localhost:3333/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92/release
+POST http://localhost:3333/api/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92/release
 
 ###
 
 # @name updateProduct
-PUT http://localhost:3333/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92
+PUT http://localhost:3333/api/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92
 Content-Type: application/json
 
 {
@@ -51,4 +51,4 @@ Content-Type: application/json
 ###
 
 # @name listProducts
-GET http://localhost:3333/products
+GET http://localhost:3333/api/products

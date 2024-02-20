@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { NotFoundError } from '../errors/NotFound';
 import { ProductsRepository } from '../repository/ProductsRepository';
 
@@ -11,3 +13,9 @@ export class ReleaseProduct {
     await this.productsRepository.update(product);
   }
 }
+
+export const releaseProductParams = z.object({
+  productId: z
+    .string({ required_error: 'productId is required' })
+    .uuid('productId is not a valid uuid'),
+});
