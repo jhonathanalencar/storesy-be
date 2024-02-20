@@ -9,10 +9,10 @@ import { ProductsRepositoryDatabase } from './infra/repository/ProductsRepositor
 import { PgPromiseAdapter } from './infra/database/PgPromiseAdapter';
 import { ListAllProducts } from './application/usecase/ListAllProducts';
 import { UpdateProduct } from './application/usecase/UpdateProduct';
-import { ProductController } from './infra/controller/ProductController';
+import { ProductControllerHttp } from './infra/controller/ProductControllerHttp';
+import { RouterFactory } from './infra/http/RouterFactory';
 
 LoadEnv.load();
-const httpServer = new ExpressAdapter();
 const connection = new PgPromiseAdapter();
 const productsRepository = new ProductsRepositoryDatabase(connection);
 const getProductsByCategory = new GetProductsByCategory(productsRepository);
@@ -21,9 +21,7 @@ const getProduct = new GetProduct(productsRepository);
 const addProduct = new AddProduct(productsRepository);
 const releaseProduct = new ReleaseProduct(productsRepository);
 const updateProduct = new UpdateProduct(productsRepository);
-
-new ProductController(
-  httpServer,
+const productController = new ProductControllerHttp(
   getProductsByCategory,
   getProduct,
   addProduct,
@@ -31,6 +29,7 @@ new ProductController(
   listAllProducts,
   updateProduct
 );
-httpServer.notFound();
+const routerFactory = new RouterFactory(productController);
+const httpServer = new ExpressAdapter(routerFactory);
 new ErrorHandler(httpServer);
 httpServer.listen(3333);
