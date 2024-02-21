@@ -58,11 +58,10 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
   }
 
   async getByCategory(category: string): Promise<Product[]> {
-    const productsWithCategoryData: productsWithCategory[] =
-      await this.connection.query(
-        'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.category c on c.name = $1',
-        [category]
-      );
+    const productsWithCategoryData: productsWithCategory[] = await this.connection.query(
+      'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.category c on c.name = $1',
+      [category]
+    );
     const products = productsWithCategoryData.map((productWithCategory) => {
       return Product.restore(
         productWithCategory.product_id,
@@ -84,11 +83,10 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
   }
 
   async getById(id: string): Promise<Product | undefined> {
-    const productWithCategoryData: productsWithCategory[] =
-      await this.connection.query(
-        'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.product_category pc on pc.product_id = p.product_id inner join lak.category c on pc.category_id = c.category_id where p.product_id = $1',
-        [id]
-      );
+    const productWithCategoryData: productsWithCategory[] = await this.connection.query(
+      'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.product_category pc on pc.product_id = p.product_id inner join lak.category c on pc.category_id = c.category_id where p.product_id = $1',
+      [id]
+    );
     if (productWithCategoryData.length === 0) return;
     const productData = productWithCategoryData.reduce(
       (acc, product) => {
@@ -125,16 +123,14 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
   }
 
   async listAll(): Promise<Product[]> {
-    const [productsData, categoriesData]: [
-      ProductModel[],
-      { name: string; product_id: string }[],
-    ] = await Promise.all([
-      this.connection.query('select * from lak.product', []),
-      this.connection.query(
-        'select distinct pc.product_id, c.category_id, c.name from lak.product_category pc inner join lak.category c on c.category_id = pc.category_id',
-        []
-      ),
-    ]);
+    const [productsData, categoriesData]: [ProductModel[], { name: string; product_id: string }[]] =
+      await Promise.all([
+        this.connection.query('select * from lak.product', []),
+        this.connection.query(
+          'select distinct pc.product_id, c.category_id, c.name from lak.product_category pc inner join lak.category c on c.category_id = pc.category_id',
+          []
+        ),
+      ]);
     const products = productsData.map((product) => {
       return Product.restore(
         product.product_id,
