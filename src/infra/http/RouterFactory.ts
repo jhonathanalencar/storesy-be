@@ -1,12 +1,19 @@
 import { Router } from 'express';
 
 import { ProductController } from '../../application/controller/ProductController';
+import { CategoryController } from '../../application/controller/CategoryController';
 
 export class RouterFactory {
-  constructor(private readonly productController: ProductController) {}
+  constructor(
+    private readonly productController: ProductController,
+    private readonly categoryController: CategoryController
+  ) {}
 
   register() {
     const router = Router();
+    router.get('/category', (request, response) => {
+      return this.categoryController.list(request, response);
+    });
     router.get('/products/category/:category', (request, response) => {
       return this.productController.getByCategory(request, response);
     });

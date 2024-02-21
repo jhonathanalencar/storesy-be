@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { NotFoundError } from '../errors/NotFound';
-import { ProductsRepository } from '../repository/ProductsRepository';
+import { NotFoundError } from '../../errors/NotFound';
+import { ProductsRepository } from '../../repository/ProductsRepository';
 
 export class GetProduct {
   constructor(readonly productsRepository: ProductsRepository) {}

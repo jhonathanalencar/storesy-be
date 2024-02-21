@@ -1,4 +1,4 @@
-import { AddProduct, Input } from '../../src/application/usecase/AddProduct';
+import { AddProduct, Input } from '../../src/application/usecase/product/AddProduct';
 import { ProductsRepositoryMemory } from '../../src/infra/repository/ProductsRepositoryMemory';
 
 test('Should be able to add a product', async () => {
@@ -15,9 +15,7 @@ test('Should be able to add a product', async () => {
     quantity: 10,
   };
   const outputAddProduct = await addProduct.execute(inputAddProduct);
-  const foundProduct = await productsRepository.getById(
-    outputAddProduct.productId
-  );
+  const foundProduct = await productsRepository.getById(outputAddProduct.productId);
   expect(foundProduct.name).toEqual(inputAddProduct.name);
   expect(foundProduct.description).toEqual(inputAddProduct.description);
   expect(foundProduct.price).toEqual(inputAddProduct.price);

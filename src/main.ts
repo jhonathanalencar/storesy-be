@@ -1,16 +1,19 @@
-import { AddProduct } from './application/usecase/AddProduct';
-import { GetProduct } from './application/usecase/GetProduct';
-import { GetProductsByCategory } from './application/usecase/GetProductsByCategory';
-import { ReleaseProduct } from './application/usecase/ReleaseProduct';
+import { AddProduct } from './application/usecase/product/AddProduct';
+import { GetProduct } from './application/usecase/product/GetProduct';
+import { GetProductsByCategory } from './application/usecase/product/GetProductsByCategory';
+import { ReleaseProduct } from './application/usecase/product/ReleaseProduct';
 import { ExpressAdapter } from './infra/http/ExpressAdapter';
 import { ErrorHandler } from './application/errors/ErrorHandler';
 import { LoadEnv } from './infra/helpers/LoadEnv';
 import { ProductsRepositoryDatabase } from './infra/repository/ProductsRepositoryDatabase';
 import { PgPromiseAdapter } from './infra/database/PgPromiseAdapter';
-import { ListAllProducts } from './application/usecase/ListAllProducts';
-import { UpdateProduct } from './application/usecase/UpdateProduct';
+import { ListAllProducts } from './application/usecase/product/ListAllProducts';
+import { UpdateProduct } from './application/usecase/product/UpdateProduct';
 import { ProductControllerHttp } from './infra/controller/ProductControllerHttp';
 import { RouterFactory } from './infra/http/RouterFactory';
+import { CategoryControllerHttp } from './infra/controller/CategoryControllerHttp';
+import { CategoryRepositoryDatabase } from './infra/repository/CategoryRepositoryDatabase';
+import { ListAllCategories } from './application/usecase/category/ListAllCategories';
 
 LoadEnv.load();
 const connection = new PgPromiseAdapter();
@@ -29,7 +32,10 @@ const productController = new ProductControllerHttp(
   listAllProducts,
   updateProduct
 );
-const routerFactory = new RouterFactory(productController);
+const categoryRepository = new CategoryRepositoryDatabase(connection);
+const listAllCategories = new ListAllCategories(categoryRepository);
+const categoryController = new CategoryControllerHttp(listAllCategories);
+const routerFactory = new RouterFactory(productController, categoryController);
 const httpServer = new ExpressAdapter(routerFactory);
 new ErrorHandler(httpServer);
 httpServer.listen(3333);

@@ -1,5 +1,5 @@
 import { ProductsRepository } from '../../src/application/repository/ProductsRepository';
-import { GetProduct } from '../../src/application/usecase/GetProduct';
+import { GetProduct } from '../../src/application/usecase/product/GetProduct';
 import { ProductsRepositoryMemory } from '../../src/infra/repository/ProductsRepositoryMemory';
 
 describe('Get Product UseCase', () => {
@@ -24,8 +24,6 @@ describe('Get Product UseCase', () => {
   });
 
   test("Shouldn't be able to get a non existing product", async () => {
-    expect(getProduct.execute('faker')).rejects.toThrow(
-      new Error('Product not found!')
-    );
+    expect(getProduct.execute('faker')).rejects.toThrow(new Error('Product not found!'));
   });
 });

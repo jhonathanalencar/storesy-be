@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { Product } from '../../domain/entity/Product';
-import { NotFoundError } from '../errors/NotFound';
-import { ProductsRepository } from '../repository/ProductsRepository';
+import { Product } from '../../../domain/entity/Product';
+import { NotFoundError } from '../../errors/NotFound';
+import { ProductsRepository } from '../../repository/ProductsRepository';
 
 export class UpdateProduct {
   constructor(readonly productsRepository: ProductsRepository) {}

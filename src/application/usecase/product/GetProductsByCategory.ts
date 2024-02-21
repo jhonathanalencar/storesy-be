@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { ProductsRepository } from '../repository/ProductsRepository';
+import { ProductsRepository } from '../../repository/ProductsRepository';
 
 export class GetProductsByCategory {
   constructor(readonly productsRepository: ProductsRepository) {}

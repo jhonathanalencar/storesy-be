@@ -1,7 +1,7 @@
 import { ProductsRepository } from '../../src/application/repository/ProductsRepository';
-import { GetProduct } from '../../src/application/usecase/GetProduct';
-import { GetProductsByCategory } from '../../src/application/usecase/GetProductsByCategory';
-import { ReleaseProduct } from '../../src/application/usecase/ReleaseProduct';
+import { GetProduct } from '../../src/application/usecase/product/GetProduct';
+import { GetProductsByCategory } from '../../src/application/usecase/product/GetProductsByCategory';
+import { ReleaseProduct } from '../../src/application/usecase/product/ReleaseProduct';
 import { ProductsRepositoryMemory } from '../../src/infra/repository/ProductsRepositoryMemory';
 
 describe('Get Products By Category UseCase', () => {
@@ -15,10 +15,7 @@ describe('Get Products By Category UseCase', () => {
 
   test('Should get products by category', async () => {
     const products = await getProductsByCategory.execute('Headphones');
-    expect(products[0]).toHaveProperty(
-      'categories',
-      expect.arrayContaining(['headphones'])
-    );
+    expect(products[0]).toHaveProperty('categories', expect.arrayContaining(['headphones']));
   });
 
   test("Shouldn't be able to get unreleased products", async () => {

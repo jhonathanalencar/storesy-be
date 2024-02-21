@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { Product } from '../../domain/entity/Product';
-import { ProductsRepository } from '../repository/ProductsRepository';
+import { Product } from '../../../domain/entity/Product';
+import { ProductsRepository } from '../../repository/ProductsRepository';
 
 export class AddProduct {
   constructor(readonly productsRepository: ProductsRepository) {}

@@ -1,18 +1,21 @@
 import type { Request, Response } from 'express';
 
-import { ListAllProducts } from '../../application/usecase/ListAllProducts';
-import { AddProduct, createProductBody } from '../../application/usecase/AddProduct';
-import { GetProduct, getProductParams } from '../../application/usecase/GetProduct';
+import { ListAllProducts } from '../../application/usecase/product/ListAllProducts';
+import { AddProduct, createProductBody } from '../../application/usecase/product/AddProduct';
+import { GetProduct, getProductParams } from '../../application/usecase/product/GetProduct';
 import {
   GetProductsByCategory,
   getProductsByCategoryParams,
-} from '../../application/usecase/GetProductsByCategory';
-import { ReleaseProduct, releaseProductParams } from '../../application/usecase/ReleaseProduct';
+} from '../../application/usecase/product/GetProductsByCategory';
+import {
+  ReleaseProduct,
+  releaseProductParams,
+} from '../../application/usecase/product/ReleaseProduct';
 import {
   UpdateProduct,
   updateProductBody,
   updateProductParams,
-} from '../../application/usecase/UpdateProduct';
+} from '../../application/usecase/product/UpdateProduct';
 import { ProductController } from '../../application/controller/ProductController';
 
 export class ProductControllerHttp implements ProductController {
