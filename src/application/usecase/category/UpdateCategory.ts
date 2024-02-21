@@ -11,6 +11,7 @@ export class UpdateCategory {
     const updatedCategory = Category.restore(
       category.categoryId,
       input.name,
+      input.name.toLowerCase().split(' ').join('-'),
       category.createdAt,
       new Date()
     );

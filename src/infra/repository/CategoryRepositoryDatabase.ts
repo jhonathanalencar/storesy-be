@@ -8,15 +8,15 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
 
   async save(category: Category): Promise<void> {
     await this.connection.query(
-      'insert into lak.category (category_id, name, created_at, updated_at) values ($1, $2, $3, $4)',
-      [category.categoryId, category.name, category.createdAt, category.updatedAt]
+      'insert into lak.category (category_id, name, slug, created_at, updated_at) values ($1, $2, $3, $4, $5)',
+      [category.categoryId, category.name, category.slug, category.createdAt, category.updatedAt]
     );
   }
 
   async update(category: Category): Promise<void> {
     await this.connection.query(
-      'update lak.category set (name, updated_at) = ($1, $2)  where category_id = $3',
-      [category.name, category.updatedAt, category.categoryId]
+      'update lak.category set (name, slug, updated_at) = ($1, $2, $3)  where category_id = $4',
+      [category.name, category.slug, category.updatedAt, category.categoryId]
     );
   }
 
@@ -29,6 +29,7 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
     const category = Category.restore(
       categoryData.category_id,
       categoryData.name,
+      categoryData.slug,
       categoryData.created_at,
       categoryData.updated_at
     );
@@ -44,6 +45,7 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
       return Category.restore(
         category.category_id,
         category.name,
+        category.slug,
         category.created_at,
         category.updated_at
       );

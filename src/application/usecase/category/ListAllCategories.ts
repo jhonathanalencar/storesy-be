@@ -9,6 +9,7 @@ export class ListAllCategories {
       return {
         categoryId: category.categoryId,
         name: category.name,
+        slug: category.slug,
       };
     });
   }
@@ -17,4 +18,5 @@ export class ListAllCategories {
 export type Output = {
   categoryId: string;
   name: string;
+  slug: string;
 }[];

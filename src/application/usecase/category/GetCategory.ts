@@ -10,6 +10,7 @@ export class GetCategory {
     return {
       categoryId: category.categoryId,
       name: category.name,
+      slug: category.slug,
     };
   }
 }
@@ -21,4 +22,5 @@ export type Input = {
 export type Output = {
   categoryId: string;
   name: string;
+  slug: string;
 };
