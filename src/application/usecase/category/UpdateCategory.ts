@@ -1,3 +1,4 @@
+import { Category } from '../../../domain/entity/Category';
 import { NotFoundError } from '../../errors/NotFound';
 import { CategoryRepository } from '../../repository/CategoryRepository';
 
@@ -7,7 +8,13 @@ export class UpdateCategory {
   async execute(input: Input) {
     const category = await this.categoryRepository.getById(input.categoryId);
     if (!category) throw new NotFoundError('category not found');
-    await this.categoryRepository.update(category);
+    const updatedCategory = Category.restore(
+      category.categoryId,
+      input.name,
+      category.createdAt,
+      new Date()
+    );
+    await this.categoryRepository.update(updatedCategory);
   }
 }
 

@@ -52,3 +52,33 @@ Content-Type: application/json
 
 # @name listProducts
 GET http://localhost:3333/api/products
+
+###
+
+# @name listCategories
+GET http://localhost:3333/api/category
+
+###
+
+# @name createCategory
+POST http://localhost:3333/api/category
+Content-Type: application/json
+
+{
+  "name": "Comestic"
+}
+
+###
+
+# @name getCategorybyId
+GET http://localhost:3333/api/category/4a7a41d1-879e-43ba-9e1b-6eab6e1b446b
+
+###
+
+# @name updateCategory
+PUT http://localhost:3333/api/category/b679f868-f83b-4571-b27b-b7fbd9c383ea
+Content-Type: application/json
+
+{
+  "name": "Comestic 2"
+}

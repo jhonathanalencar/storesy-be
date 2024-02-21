@@ -14,10 +14,10 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
   }
 
   async update(category: Category): Promise<void> {
-    await this.connection.query('update lak.category set (name) = ($1)  where category_id = $2', [
-      category.name,
-      category.categoryId,
-    ]);
+    await this.connection.query(
+      'update lak.category set (name, updated_at) = ($1, $2)  where category_id = $3',
+      [category.name, category.updatedAt, category.categoryId]
+    );
   }
 
   async getById(categoryId: string): Promise<Category | undefined> {
