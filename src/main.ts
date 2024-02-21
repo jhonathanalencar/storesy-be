@@ -14,6 +14,9 @@ import { RouterFactory } from './infra/http/RouterFactory';
 import { CategoryControllerHttp } from './infra/controller/CategoryControllerHttp';
 import { CategoryRepositoryDatabase } from './infra/repository/CategoryRepositoryDatabase';
 import { ListAllCategories } from './application/usecase/category/ListAllCategories';
+import { CreateCategory } from './application/usecase/category/CreateCategory';
+import { GetCategory } from './application/usecase/category/GetCategory';
+import { UpdateCategory } from './application/usecase/category/UpdateCategory';
 
 LoadEnv.load();
 const connection = new PgPromiseAdapter();
@@ -33,8 +36,16 @@ const productController = new ProductControllerHttp(
   updateProduct
 );
 const categoryRepository = new CategoryRepositoryDatabase(connection);
+const createCategory = new CreateCategory(categoryRepository);
+const getCategory = new GetCategory(categoryRepository);
 const listAllCategories = new ListAllCategories(categoryRepository);
-const categoryController = new CategoryControllerHttp(listAllCategories);
+const updateCategory = new UpdateCategory(categoryRepository);
+const categoryController = new CategoryControllerHttp(
+  createCategory,
+  getCategory,
+  listAllCategories,
+  updateCategory
+);
 const routerFactory = new RouterFactory(productController, categoryController);
 const httpServer = new ExpressAdapter(routerFactory);
 new ErrorHandler(httpServer);

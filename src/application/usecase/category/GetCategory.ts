@@ -8,7 +8,7 @@ export class GetCategory {
     const category = await this.categoryRepository.getById(input.categoryId);
     if (!category) throw new NotFoundError('Category not found');
     return {
-      categoryId: category.name,
+      categoryId: category.categoryId,
       name: category.name,
     };
   }
