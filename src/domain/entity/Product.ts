@@ -2,8 +2,21 @@ import crypto from 'node:crypto';
 
 import { Rate } from './Rate';
 
+export class Discount {
+  constructor(
+    readonly discountId: string,
+    readonly discountPercent: number,
+    readonly active: boolean
+  ) {}
+
+  static create(discountId: string, discountPercent: number, active: boolean) {
+    return new Discount(discountId, discountPercent, active);
+  }
+}
+
 export class Product {
   ratings: Rate[];
+  discount: Discount | null;
 
   constructor(
     readonly productId: string,
@@ -40,10 +53,7 @@ export class Product {
   ) {
     const productId = crypto.randomUUID();
     const slug = name.toLowerCase().split(' ').join('-');
-    const summary =
-      description.length < 100
-        ? description
-        : `${description.substring(0, 100)}...`;
+    const summary = description.length < 100 ? description : `${description.substring(0, 100)}...`;
     const currentDate = new Date();
     return new Product(
       productId,

@@ -52,6 +52,46 @@ create table lak.product_category (
   constraint fk_product foreign key(product_id) references lak.product(product_id) on delete cascade,
   constraint fk_category foreign key(category_id) references lak.category(category_id) on delete cascade
 );
+create table verification_token (
+  identifier TEXT NOT NULL,
+  expires TIMESTAMPTZ NOT NULL,
+  token TEXT NOT NULL,
+
+  PRIMARY KEY (identifier, token)
+);
+create table accounts (
+  id SERIAL,
+  "userId" INTEGER NOT NULL,
+  type VARCHAR(255) NOT NULL,
+  provider VARCHAR(255) NOT NULL,
+  "providerAccountId" VARCHAR(255) NOT NULL,
+  refresh_token TEXT,
+  access_token TEXT,
+  expires_at BIGINT,
+  id_token TEXT,
+  scope TEXT,
+  session_state TEXT,
+  token_type TEXT,
+
+  PRIMARY KEY (id)
+);
+create table sessions (
+  id SERIAL,
+  "userId" INTEGER NOT NULL,
+  expires TIMESTAMPTZ NOT NULL,
+  "sessionToken" VARCHAR(255) NOT NULL,
+
+  PRIMARY KEY (id)
+);
+create table users (
+  id SERIAL,
+  name VARCHAR(255),
+  email VARCHAR(255),
+  "emailVerified" TIMESTAMPTZ,
+  image TEXT,
+
+  PRIMARY KEY (id)
+);
 
 insert into lak.category (category_id, name, slug) values ('4a7a41d1-879e-43ba-9e1b-6eab6e1b446b', 'Headphones', 'headphones');
 insert into lak.category (category_id, name, slug) values ('d61ccf6d-b8f7-48a9-ba0e-a15b0050bfae', 'Technology', 'technology');

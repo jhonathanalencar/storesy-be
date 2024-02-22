@@ -17,6 +17,7 @@ import {
   updateProductParams,
 } from '../../application/usecase/product/UpdateProduct';
 import { ProductController } from '../../application/controller/ProductController';
+import { GetProductsBySlug } from '../../application/usecase/product/GetProductsBySlug';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -25,7 +26,8 @@ export class ProductControllerHttp implements ProductController {
     private readonly addProduct: AddProduct,
     private readonly releaseProduct: ReleaseProduct,
     private readonly listAllProducts: ListAllProducts,
-    private readonly updateProduct: UpdateProduct
+    private readonly updateProduct: UpdateProduct,
+    private readonly getProductBySlug: GetProductsBySlug
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
@@ -43,6 +45,12 @@ export class ProductControllerHttp implements ProductController {
   async getByCategory(request: Request, response: Response): Promise<void> {
     const { category } = getProductsByCategoryParams.parse(request.params);
     const output = await this.getProductsByCategory.execute(category);
+    response.status(200).json(output);
+  }
+
+  async getBySlug(request: Request, response: Response): Promise<void> {
+    const { slug } = request.params;
+    const output = await this.getProductBySlug.execute(slug);
     response.status(200).json(output);
   }
 

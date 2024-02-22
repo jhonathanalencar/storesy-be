@@ -8,6 +8,7 @@ export class ListAllProducts {
       return {
         productId: product.productId,
         name: product.name,
+        slug: product.slug,
         description: product.description,
         price: product.price,
         categories: product.categories,
@@ -21,6 +22,7 @@ export class ListAllProducts {
 
 export type Output = {
   productId: string;
+  slug: string;
   name: string;
   description: string;
   price: number;

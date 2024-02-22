@@ -42,6 +42,9 @@ export class RouterFactory {
     router.get('/products/category/:category', (request, response) => {
       return this.productController.getByCategory(request, response);
     });
+    router.get('/products/slug/:slug', (request, response) => {
+      return this.productController.getBySlug(request, response);
+    });
     return router;
   }
 }

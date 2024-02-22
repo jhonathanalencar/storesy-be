@@ -4,12 +4,22 @@ services:
   postgres:
     image: postgres:15.5-alpine
     ports:
-      - 5433:5432
+      - 5432:5432
     volumes:
       - .docker/.pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=storesyDB
+
+  pgadmin:
+    image: dpage/pgadmin4:7.6
+    ports:
+      - 9000:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@user.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    depends_on:
+      - postgres
 
   redis:
     image: bitnami/redis:latest
