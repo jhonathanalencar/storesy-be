@@ -59,7 +59,7 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
 
   async getByCategory(category: string): Promise<Product[]> {
     const productsWithCategoryData: productsWithCategory[] = await this.connection.query(
-      'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.category c on c.name = $1',
+      'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.category c on c.slug = $1 inner join lak.product_category pc on pc.category_id = c.category_id where pc.product_id = p.product_id and pc.category_id = c.category_id',
       [category]
     );
     const products = productsWithCategoryData.map((productWithCategory) => {
