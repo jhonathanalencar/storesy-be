@@ -18,6 +18,7 @@ import { CreateCategory } from './application/usecase/category/CreateCategory';
 import { GetCategory } from './application/usecase/category/GetCategory';
 import { UpdateCategory } from './application/usecase/category/UpdateCategory';
 import { GetProductsBySlug } from './application/usecase/product/GetProductsBySlug';
+import { ListDeals } from './application/usecase/product/ListDeals';
 
 LoadEnv.load();
 const connection = new PgPromiseAdapter();
@@ -29,6 +30,7 @@ const addProduct = new AddProduct(productsRepository);
 const releaseProduct = new ReleaseProduct(productsRepository);
 const updateProduct = new UpdateProduct(productsRepository);
 const getProductsBySlug = new GetProductsBySlug(productsRepository);
+const listDeals = new ListDeals(productsRepository);
 const productController = new ProductControllerHttp(
   getProductsByCategory,
   getProduct,
@@ -36,7 +38,8 @@ const productController = new ProductControllerHttp(
   releaseProduct,
   listAllProducts,
   updateProduct,
-  getProductsBySlug
+  getProductsBySlug,
+  listDeals
 );
 const categoryRepository = new CategoryRepositoryDatabase(connection);
 const createCategory = new CreateCategory(categoryRepository);

@@ -17,6 +17,12 @@ export type ProductData = ProductModel & {
   product_rate_updated_at: Date;
 };
 
+export type DiscountModel = {
+  discount_id: string;
+  discount_percent: number;
+  active: boolean;
+};
+
 export class ProductsRepositoryDatabase implements ProductsRepository {
   constructor(private readonly connection: Connection) {}
 
@@ -193,12 +199,28 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
   }
 
   async listDeals(): Promise<Product[]> {
-    const productsData = await this.connection.query(
+    const productsData: (ProductModel & DiscountModel)[] = await this.connection.query(
       'select * from lak.product p inner join lak.discount d on d.discount_id = p.discount_id where d.active = true limit 10',
       []
     );
-    console.log(productsData);
-    return productsData;
+    const products = productsData.map((productData) => {
+      return Product.restore(
+        productData.product_id,
+        productData.name,
+        productData.slug,
+        productData.description,
+        productData.summary,
+        parseFloat(productData.price),
+        [],
+        productData.image_url,
+        parseInt(productData.quantity),
+        productData.created_at,
+        productData.updated_at,
+        productData.discount_id,
+        productData.released_date
+      );
+    });
+    return products;
   }
 
   async listMostRecent(): Promise<Product[]> {

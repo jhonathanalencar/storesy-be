@@ -39,11 +39,14 @@ export class RouterFactory {
     router.post('/products/:productId/release', (request, response) => {
       return this.productController.release(request, response);
     });
-    router.get('/products/category/:category', (request, response) => {
+    router.get('/category/:category/products', (request, response) => {
       return this.productController.getByCategory(request, response);
     });
-    router.get('/products/slug/:slug', (request, response) => {
+    router.get('/slug/:slug/products', (request, response) => {
       return this.productController.getBySlug(request, response);
+    });
+    router.get('/deals', (request, response) => {
+      return this.productController.listDeals(request, response);
     });
     return router;
   }
