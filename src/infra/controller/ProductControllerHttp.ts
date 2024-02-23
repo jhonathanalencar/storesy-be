@@ -19,6 +19,7 @@ import {
 import { ProductController } from '../../application/controller/ProductController';
 import { GetProductsBySlug } from '../../application/usecase/product/GetProductsBySlug';
 import { ListDeals } from '../../application/usecase/product/ListDeals';
+import { ListMostRecent } from '../../application/usecase/product/ListMostRecent';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -29,7 +30,8 @@ export class ProductControllerHttp implements ProductController {
     private readonly listAllProducts: ListAllProducts,
     private readonly updateProduct: UpdateProduct,
     private readonly getProductBySlug: GetProductsBySlug,
-    private readonly listProductDeals: ListDeals
+    private readonly listProductDeals: ListDeals,
+    private readonly listRecent: ListMostRecent
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
@@ -61,8 +63,9 @@ export class ProductControllerHttp implements ProductController {
     response.status(200).json(output);
   }
 
-  listMostRecent(request: Request, response: Response): Promise<void> {
-    throw new Error('Method not implemented.');
+  async listMostRecent(request: Request, response: Response): Promise<void> {
+    const output = await this.listRecent.execute();
+    response.status(200).json(output);
   }
 
   listBestSellers(request: Request, response: Response): Promise<void> {

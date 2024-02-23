@@ -48,6 +48,9 @@ export class RouterFactory {
     router.get('/deals', (request, response) => {
       return this.productController.listDeals(request, response);
     });
+    router.get('/new-arrivals', (request, response) => {
+      return this.productController.listMostRecent(request, response);
+    });
     return router;
   }
 }

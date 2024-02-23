@@ -224,12 +224,28 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
   }
 
   async listMostRecent(): Promise<Product[]> {
-    const productsData = await this.connection.query(
+    const productsData: ProductModel[] = await this.connection.query(
       'select * from lak.product order by released_date desc limit 10',
       []
     );
-    console.log(productsData);
-    return productsData;
+    const products = productsData.map((productData) => {
+      return Product.restore(
+        productData.product_id,
+        productData.name,
+        productData.slug,
+        productData.description,
+        productData.summary,
+        parseFloat(productData.price),
+        [],
+        productData.image_url,
+        parseInt(productData.quantity),
+        productData.created_at,
+        productData.updated_at,
+        productData.discount_id,
+        productData.released_date
+      );
+    });
+    return products;
   }
 
   async listBestSellers(productIds: string[]): Promise<Product[]> {
