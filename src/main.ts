@@ -20,6 +20,7 @@ import { UpdateCategory } from './application/usecase/category/UpdateCategory';
 import { GetProductsBySlug } from './application/usecase/product/GetProductsBySlug';
 import { ListDeals } from './application/usecase/product/ListDeals';
 import { ListMostRecent } from './application/usecase/product/ListMostRecent';
+import { ListBestSellers } from './application/usecase/product/ListBestSellers';
 
 LoadEnv.load();
 const connection = new PgPromiseAdapter();
@@ -33,6 +34,7 @@ const updateProduct = new UpdateProduct(productsRepository);
 const getProductsBySlug = new GetProductsBySlug(productsRepository);
 const listDeals = new ListDeals(productsRepository);
 const listMostRecent = new ListMostRecent(productsRepository);
+const listBestSellers = new ListBestSellers(productsRepository);
 const productController = new ProductControllerHttp(
   getProductsByCategory,
   getProduct,
@@ -42,7 +44,8 @@ const productController = new ProductControllerHttp(
   updateProduct,
   getProductsBySlug,
   listDeals,
-  listMostRecent
+  listMostRecent,
+  listBestSellers
 );
 const categoryRepository = new CategoryRepositoryDatabase(connection);
 const createCategory = new CreateCategory(categoryRepository);

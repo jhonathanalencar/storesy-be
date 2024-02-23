@@ -9,5 +9,5 @@ export interface ProductsRepository {
   listAll(): Promise<Product[]>;
   listDeals(): Promise<Product[]>;
   listMostRecent(): Promise<Product[]>;
-  listBestSellers(ids: string[]): Promise<Product[]>;
+  listBestSellers(ids: string): Promise<Product[]>;
 }

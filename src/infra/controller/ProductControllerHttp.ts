@@ -20,6 +20,7 @@ import { ProductController } from '../../application/controller/ProductControlle
 import { GetProductsBySlug } from '../../application/usecase/product/GetProductsBySlug';
 import { ListDeals } from '../../application/usecase/product/ListDeals';
 import { ListMostRecent } from '../../application/usecase/product/ListMostRecent';
+import { ListBestSellers } from '../../application/usecase/product/ListBestSellers';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -31,7 +32,8 @@ export class ProductControllerHttp implements ProductController {
     private readonly updateProduct: UpdateProduct,
     private readonly getProductBySlug: GetProductsBySlug,
     private readonly listProductDeals: ListDeals,
-    private readonly listRecent: ListMostRecent
+    private readonly listRecent: ListMostRecent,
+    private readonly listBestSellersProducts: ListBestSellers
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
@@ -68,8 +70,12 @@ export class ProductControllerHttp implements ProductController {
     response.status(200).json(output);
   }
 
-  listBestSellers(request: Request, response: Response): Promise<void> {
-    throw new Error('Method not implemented.');
+  async listBestSellers(request: Request, response: Response): Promise<void> {
+    const { productIds } = request.query;
+    const output = await this.listBestSellersProducts.execute({
+      productIds: productIds as string,
+    });
+    response.status(200).json(output);
   }
 
   async listDeals(request: Request, response: Response): Promise<void> {

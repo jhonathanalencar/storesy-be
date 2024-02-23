@@ -51,6 +51,9 @@ export class RouterFactory {
     router.get('/new-arrivals', (request, response) => {
       return this.productController.listMostRecent(request, response);
     });
+    router.get('/best-sellers', (request, response) => {
+      return this.productController.listBestSellers(request, response);
+    });
     return router;
   }
 }
