@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { NotFoundError } from '../../errors/NotFound';
 import { CategoryRepository } from '../../repository/CategoryRepository';
 
@@ -24,3 +26,9 @@ export type Output = {
   name: string;
   slug: string;
 };
+
+export const getCategoryParams = z.object({
+  categoryId: z
+    .string({ required_error: 'categoryId is required' })
+    .uuid('categoryId is not a valid uuid'),
+});

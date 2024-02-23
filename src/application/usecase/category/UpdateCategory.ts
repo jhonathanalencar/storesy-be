@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { Category } from '../../../domain/entity/Category';
 import { NotFoundError } from '../../errors/NotFound';
 import { CategoryRepository } from '../../repository/CategoryRepository';
@@ -23,3 +25,13 @@ export type Input = {
   categoryId: string;
   name: string;
 };
+
+export const updateCategoryParams = z.object({
+  categoryId: z
+    .string({ required_error: 'categoryId is required' })
+    .uuid('categoryId is not a valid uuid'),
+});
+
+export const updateCategoryBody = z.object({
+  name: z.string({ required_error: 'name is required' }).trim().min(1, 'name is required'),
+});

@@ -2,9 +2,16 @@ import type { Request, Response } from 'express';
 
 import { CategoryController } from '../../application/controller/CategoryController';
 import { ListAllCategories } from '../../application/usecase/category/ListAllCategories';
-import { CreateCategory } from '../../application/usecase/category/CreateCategory';
-import { GetCategory } from '../../application/usecase/category/GetCategory';
-import { UpdateCategory } from '../../application/usecase/category/UpdateCategory';
+import {
+  CreateCategory,
+  createCategoryBody,
+} from '../../application/usecase/category/CreateCategory';
+import { GetCategory, getCategoryParams } from '../../application/usecase/category/GetCategory';
+import {
+  UpdateCategory,
+  updateCategoryParams,
+  updateCategoryBody,
+} from '../../application/usecase/category/UpdateCategory';
 
 export class CategoryControllerHttp implements CategoryController {
   constructor(
@@ -15,13 +22,13 @@ export class CategoryControllerHttp implements CategoryController {
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
-    const body = request.body;
-    const output = await this.createCategory.execute(body);
+    const { name } = createCategoryBody.parse(request.body);
+    const output = await this.createCategory.execute({ name });
     response.status(201).json(output);
   }
 
   async getById(request: Request, response: Response): Promise<void> {
-    const { categoryId } = request.params;
+    const { categoryId } = getCategoryParams.parse(request.params);
     const output = await this.getCategory.execute({ categoryId });
     response.status(200).json(output);
   }
@@ -32,8 +39,8 @@ export class CategoryControllerHttp implements CategoryController {
   }
 
   async update(request: Request, response: Response): Promise<void> {
-    const { categoryId } = request.params;
-    const { name } = request.body;
+    const { categoryId } = updateCategoryParams.parse(request.params);
+    const { name } = updateCategoryBody.parse(request.body);
     await this.updateCategory.execute({ categoryId, name });
     response.status(204).send();
   }

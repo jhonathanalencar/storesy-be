@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { Category } from '../../../domain/entity/Category';
 import { CategoryRepository } from '../../repository/CategoryRepository';
 
@@ -18,3 +20,7 @@ export type Input = {
 export type Output = {
   categoryId: string;
 };
+
+export const createCategoryBody = z.object({
+  name: z.string({ required_error: 'name is required' }).trim().min(1, 'name is required'),
+});
