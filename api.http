@@ -65,7 +65,7 @@ POST http://localhost:3333/api/category
 Content-Type: application/json
 
 {
-  "name": "Cosmetic"
+  "name": "Video Games"
 }
 
 ###

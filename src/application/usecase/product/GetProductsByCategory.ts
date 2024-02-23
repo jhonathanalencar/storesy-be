@@ -6,17 +6,19 @@ export class GetProductsByCategory {
   constructor(readonly productsRepository: ProductsRepository) {}
 
   async execute(category: string): Promise<Output> {
-    const productsData = await this.productsRepository.getByCategory(category.toLowerCase());
-    const products = [];
+    const productsData = await this.productsRepository.getByCategory(category);
+    const products: Output = [];
     for (const product of productsData) {
       products.push({
         productId: product.productId,
+        slug: product.slug,
         name: product.name,
         price: product.price,
-        summary: product.summary,
+        quantity: product.quantity,
+        description: product.description,
         categories: product.categories,
         imageUrl: product.imageUrl,
-        releaseDate: product.getReleasedDate(),
+        releasedDate: product.getReleasedDate(),
       });
     }
     return products;
@@ -25,11 +27,14 @@ export class GetProductsByCategory {
 
 export type Output = {
   productId: string;
+  slug: string;
   name: string;
+  description: string;
   price: number;
-  summary: string;
+  quantity: number;
   categories: string[];
   imageUrl: string;
+  releasedDate: Date | undefined;
 }[];
 
 export const getProductsByCategoryParams = z.object({
