@@ -67,37 +67,37 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
   }
 
   async getByCategory(category: string): Promise<Product[]> {
-    const productsWithCategoryData: ProductData[] = await this.connection.query(
-      'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.category c on c.slug = $1 inner join lak.product_category pc on pc.category_id = c.category_id inner join lak.discount d on d.discount_id = p.discount_id inner join lak.product_rate pr on pr.product_id = p.product_id where pc.product_id = p.product_id and pc.category_id = c.category_id',
+    const productsData: ProductData[] = await this.connection.query(
+      'select p.*, c.name as category_name, c.category_id from lak.product p inner join lak.category c on c.slug = $1 inner join lak.product_category pc on pc.category_id = c.category_id left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where pc.product_id = p.product_id and pc.category_id = c.category_id',
       [category]
     );
-    const products = productsWithCategoryData.map((productWithCategory) => {
+    const products = productsData.map((productData) => {
       return Product.restore(
-        productWithCategory.product_id,
-        productWithCategory.name,
-        productWithCategory.slug,
-        productWithCategory.description,
-        productWithCategory.summary,
-        parseFloat(productWithCategory.price),
-        [productWithCategory.category_name],
-        productWithCategory.image_url,
-        parseInt(productWithCategory.quantity),
-        productWithCategory.created_at,
-        productWithCategory.updated_at,
-        productWithCategory.discount_id,
-        productWithCategory.released_date
+        productData.product_id,
+        productData.name,
+        productData.slug,
+        productData.description,
+        productData.summary,
+        parseFloat(productData.price),
+        [productData.category_name],
+        productData.image_url,
+        parseInt(productData.quantity),
+        productData.created_at,
+        productData.updated_at,
+        productData.discount_id,
+        productData.released_date
       );
     });
     return products;
   }
 
   async getBySlug(slug: string): Promise<Product | undefined> {
-    const productWithCategoryData: ProductData[] = await this.connection.query(
+    const productsData: ProductData[] = await this.connection.query(
       'select p.*, c.name as category_name, c.category_id, d.discount_percent, d.active, pr.product_rate_id, pr.score, pr.user_id, pr.created_at as product_rate_created_at, pr.updated_at as product_rate_updated_at, pr.description as product_rate_description from lak.product p inner join lak.product_category pc on pc.product_id = p.product_id inner join lak.category c on pc.category_id = c.category_id left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where p.slug = $1',
       [slug]
     );
-    if (productWithCategoryData.length === 0) return;
-    const productData = formatProductData(productWithCategoryData);
+    if (productsData.length === 0) return;
+    const productData = formatProductData(productsData);
     const product = Product.restore(
       productData.product_id,
       productData.name,
@@ -190,5 +190,32 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
       );
     });
     return products;
+  }
+
+  async listDeals(): Promise<Product[]> {
+    const productsData = await this.connection.query(
+      'select * from lak.product p inner join lak.discount d on d.discount_id = p.discount_id where d.active = true limit 10',
+      []
+    );
+    console.log(productsData);
+    return productsData;
+  }
+
+  async listMostRecent(): Promise<Product[]> {
+    const productsData = await this.connection.query(
+      'select * from lak.product order by released_date desc limit 10',
+      []
+    );
+    console.log(productsData);
+    return productsData;
+  }
+
+  async listBestSellers(productIds: string[]): Promise<Product[]> {
+    const productsData = await this.connection.query(
+      'select * from lak.product where product_id in ($1) limit 10',
+      [productIds.join()]
+    );
+    console.log(productsData);
+    return productsData;
   }
 }

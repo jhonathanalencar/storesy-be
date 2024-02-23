@@ -7,4 +7,7 @@ export interface ProductsRepository {
   getById(id: string): Promise<Product | undefined>;
   getBySlug(slug: string): Promise<Product | undefined>;
   listAll(): Promise<Product[]>;
+  listDeals(): Promise<Product[]>;
+  listMostRecent(): Promise<Product[]>;
+  listBestSellers(ids: string[]): Promise<Product[]>;
 }

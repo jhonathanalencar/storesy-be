@@ -32,6 +32,9 @@ export class ProductsRepositoryMemory implements ProductsRepository {
       ),
     ];
   }
+  getBySlug(slug: string): Promise<Product | undefined> {
+    throw new Error('Method not implemented.');
+  }
 
   async save(product: Product): Promise<void> {
     return new Promise((resolve) => {
@@ -63,9 +66,7 @@ export class ProductsRepositoryMemory implements ProductsRepository {
   }
 
   async getById(id: string): Promise<Product> {
-    const foundProduct = this.products.find(
-      (product) => product.productId === id
-    );
+    const foundProduct = this.products.find((product) => product.productId === id);
     if (!foundProduct) throw new Error('Product not found!');
     const product = new Product(
       foundProduct.productId,
@@ -90,6 +91,24 @@ export class ProductsRepositoryMemory implements ProductsRepository {
   async listAll(): Promise<Product[]> {
     return new Promise((resolve) => {
       resolve(this.products);
+    });
+  }
+
+  async listDeals(): Promise<Product[]> {
+    return new Promise((resolve) => {
+      resolve(this.products.filter((product) => product.discount?.active));
+    });
+  }
+
+  async listMostRecent(): Promise<Product[]> {
+    return new Promise((resolve) => {
+      resolve(this.products.slice(-10, this.products.length));
+    });
+  }
+
+  async listBestSellers(ids: string[]): Promise<Product[]> {
+    return new Promise((resolve) => {
+      resolve(this.products.filter((product) => ids.includes(product.productId)));
     });
   }
 }
