@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { ProductsRepository } from '../../repository/ProductsRepository';
 
 export class ListBestSellers {
@@ -36,3 +38,7 @@ export type Output = {
   quantity: number;
   releasedDate: Date | undefined;
 }[];
+
+export const listBestSellersQuery = z.object({
+  productIds: z.string({ required_error: 'productIds is required' }),
+});

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { ProductsRepository } from '../../repository/ProductsRepository';
 import { NotFoundError } from '../../errors/NotFound';
 
@@ -52,3 +54,7 @@ export type Output = {
     editedAt: Date;
   }[];
 };
+
+export const getProductsBySlugParams = z.object({
+  slug: z.string({ required_error: 'slug is required' }),
+});

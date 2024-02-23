@@ -17,10 +17,16 @@ import {
   updateProductParams,
 } from '../../application/usecase/product/UpdateProduct';
 import { ProductController } from '../../application/controller/ProductController';
-import { GetProductsBySlug } from '../../application/usecase/product/GetProductsBySlug';
+import {
+  GetProductsBySlug,
+  getProductsBySlugParams,
+} from '../../application/usecase/product/GetProductsBySlug';
 import { ListDeals } from '../../application/usecase/product/ListDeals';
 import { ListMostRecent } from '../../application/usecase/product/ListMostRecent';
-import { ListBestSellers } from '../../application/usecase/product/ListBestSellers';
+import {
+  ListBestSellers,
+  listBestSellersQuery,
+} from '../../application/usecase/product/ListBestSellers';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -55,7 +61,7 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async getBySlug(request: Request, response: Response): Promise<void> {
-    const { slug } = request.params;
+    const { slug } = getProductsBySlugParams.parse(request.params);
     const output = await this.getProductBySlug.execute(slug);
     response.status(200).json(output);
   }
@@ -71,9 +77,9 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async listBestSellers(request: Request, response: Response): Promise<void> {
-    const { productIds } = request.query;
+    const { productIds } = listBestSellersQuery.parse(request.query);
     const output = await this.listBestSellersProducts.execute({
-      productIds: productIds as string,
+      productIds,
     });
     response.status(200).json(output);
   }
