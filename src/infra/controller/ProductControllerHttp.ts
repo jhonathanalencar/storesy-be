@@ -77,9 +77,10 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async listBestSellers(request: Request, response: Response): Promise<void> {
-    const { productIds } = listBestSellersQuery.parse(request.query);
+    const { start, stop } = listBestSellersQuery.parse(request.query);
     const output = await this.listBestSellersProducts.execute({
-      productIds,
+      start,
+      stop,
     });
     response.status(200).json(output);
   }

@@ -1,4 +1,5 @@
 import { Redis } from 'ioredis';
+
 import { SortedSet } from './SortedSet';
 
 export class RedisAdapter implements SortedSet {

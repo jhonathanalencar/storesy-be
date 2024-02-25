@@ -1,12 +1,27 @@
 import { z } from 'zod';
 
 import { ProductsRepository } from '../../repository/ProductsRepository';
+import { SortedSet } from '../../../infra/cache/SortedSet';
 
 export class ListBestSellers {
-  constructor(private readonly productsRepository: ProductsRepository) {}
+  constructor(
+    private readonly productsRepository: ProductsRepository,
+    private readonly sortedSet: SortedSet
+  ) {}
 
   async execute(input: Input): Promise<Output> {
-    const products = await this.productsRepository.listBestSellers(input.productIds);
+    const sortedSet: string[] = await this.sortedSet.getSortedSet(
+      'products',
+      parseInt(input.start),
+      parseInt(input.stop)
+    );
+    const productIds = sortedSet.reduce((acc, value, index) => {
+      if (index % 2 === 0) {
+        acc.push(value);
+      }
+      return acc;
+    }, [] as string[]);
+    const products = await this.productsRepository.listBestSellers(productIds.join());
     return products.map((product) => {
       return {
         productId: product.productId,
@@ -24,7 +39,8 @@ export class ListBestSellers {
 }
 
 export type Input = {
-  productIds: string;
+  start: string;
+  stop: string;
 };
 
 export type Output = {
@@ -40,5 +56,6 @@ export type Output = {
 }[];
 
 export const listBestSellersQuery = z.object({
-  productIds: z.string({ required_error: 'productIds is required' }),
+  start: z.string({ required_error: 'start is required' }),
+  stop: z.string({ required_error: 'stop is required' }),
 });
