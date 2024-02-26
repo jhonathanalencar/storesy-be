@@ -8,15 +8,22 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
 
   async save(category: Category): Promise<void> {
     await this.connection.query(
-      'insert into lak.category (category_id, name, slug, created_at, updated_at) values ($1, $2, $3, $4, $5)',
-      [category.categoryId, category.name, category.slug, category.createdAt, category.updatedAt]
+      'insert into lak.category (category_id, name, slug, department, created_at, updated_at) values ($1, $2, $3, $4, $5, $6)',
+      [
+        category.categoryId,
+        category.name,
+        category.slug,
+        category.department,
+        category.createdAt,
+        category.updatedAt,
+      ]
     );
   }
 
   async update(category: Category): Promise<void> {
     await this.connection.query(
-      'update lak.category set (name, slug, updated_at) = ($1, $2, $3)  where category_id = $4',
-      [category.name, category.slug, category.updatedAt, category.categoryId]
+      'update lak.category set (name, slug, department, updated_at) = ($1, $2, $3, $4)  where category_id = $5',
+      [category.name, category.slug, category.department, category.updatedAt, category.categoryId]
     );
   }
 
@@ -30,6 +37,7 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
       categoryData.category_id,
       categoryData.name,
       categoryData.slug,
+      categoryData.department,
       categoryData.created_at,
       categoryData.updated_at
     );
@@ -46,6 +54,7 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
         category.category_id,
         category.name,
         category.slug,
+        category.department,
         category.created_at,
         category.updated_at
       );

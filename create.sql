@@ -10,6 +10,7 @@ create table lak.category (
   category_id uuid primary key,
   name text not null,
   slug text not null unique,
+  department text not null,
   created_at timestamp default current_timestamp,
   updated_at timestamp default current_timestamp
 );

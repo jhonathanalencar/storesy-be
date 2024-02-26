@@ -14,6 +14,7 @@ export class UpdateCategory {
       category.categoryId,
       input.name,
       input.name.toLowerCase().split(' ').join('-'),
+      input.department,
       category.createdAt,
       new Date()
     );
@@ -24,6 +25,7 @@ export class UpdateCategory {
 export type Input = {
   categoryId: string;
   name: string;
+  department: string;
 };
 
 export const updateCategoryParams = z.object({
@@ -34,4 +36,8 @@ export const updateCategoryParams = z.object({
 
 export const updateCategoryBody = z.object({
   name: z.string({ required_error: 'name is required' }).trim().min(1, 'name is required'),
+  department: z
+    .string({ required_error: 'department is required' })
+    .trim()
+    .min(1, 'department is required'),
 });

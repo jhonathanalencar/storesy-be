@@ -10,6 +10,7 @@ export class ListAllCategories {
         categoryId: category.categoryId,
         name: category.name,
         slug: category.slug,
+        department: category.department,
       };
     });
   }
@@ -19,4 +20,5 @@ export type Output = {
   categoryId: string;
   name: string;
   slug: string;
+  department: string;
 }[];

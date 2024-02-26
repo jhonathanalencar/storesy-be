@@ -7,7 +7,7 @@ export class CreateCategory {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const category = Category.create(input.name);
+    const category = Category.create(input.name, input.department);
     await this.categoryRepository.save(category);
     return { categoryId: category.categoryId };
   }
@@ -15,6 +15,7 @@ export class CreateCategory {
 
 export type Input = {
   name: string;
+  department: string;
 };
 
 export type Output = {
@@ -23,4 +24,8 @@ export type Output = {
 
 export const createCategoryBody = z.object({
   name: z.string({ required_error: 'name is required' }).trim().min(1, 'name is required'),
+  department: z
+    .string({ required_error: 'department is required' })
+    .trim()
+    .min(1, 'department is required'),
 });
