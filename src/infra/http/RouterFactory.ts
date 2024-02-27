@@ -2,15 +2,21 @@ import { Router } from 'express';
 
 import { ProductController } from '../../application/controller/ProductController';
 import { CategoryController } from '../../application/controller/CategoryController';
+import { UserController } from '../../application/controller/UserController';
 
 export class RouterFactory {
   constructor(
     private readonly productController: ProductController,
-    private readonly categoryController: CategoryController
+    private readonly categoryController: CategoryController,
+    private readonly userController: UserController
   ) {}
 
   register() {
     const router = Router();
+    router.get('/user/:userId', (request, response) => {
+      return this.userController.getById(request, response);
+    });
+
     router.get('/category', (request, response) => {
       return this.categoryController.list(request, response);
     });

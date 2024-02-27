@@ -22,6 +22,9 @@ import { ListDeals } from './application/usecase/product/ListDeals';
 import { ListMostRecent } from './application/usecase/product/ListMostRecent';
 import { ListBestSellers } from './application/usecase/product/ListBestSellers';
 import { RedisAdapter } from './infra/cache/RedisAdapter';
+import { GetUserById } from './application/usecase/user/GetUserById';
+import { UserRepositoryDatabase } from './infra/repository/UserRepositoryDatabase';
+import { UserControllerHttp } from './infra/controller/UserControllerHttp';
 
 LoadEnv.load();
 const connection = new PgPromiseAdapter();
@@ -60,7 +63,10 @@ const categoryController = new CategoryControllerHttp(
   listAllCategories,
   updateCategory
 );
-const routerFactory = new RouterFactory(productController, categoryController);
+const userRepository = new UserRepositoryDatabase(connection);
+const getUserById = new GetUserById(userRepository);
+const userController = new UserControllerHttp(getUserById);
+const routerFactory = new RouterFactory(productController, categoryController, userController);
 const httpServer = new ExpressAdapter(routerFactory);
 new ErrorHandler(httpServer);
 httpServer.listen(3333);
