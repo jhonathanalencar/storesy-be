@@ -17,6 +17,8 @@ export class Discount {
 export class Product {
   ratings: Rate[];
   discount: Discount | null;
+  rate_amount: number;
+  total_score: number;
 
   constructor(
     readonly productId: string,

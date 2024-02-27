@@ -19,6 +19,10 @@ export class GetProductsByCategory {
         categories: product.categories,
         imageUrl: product.imageUrl,
         releasedDate: product.getReleasedDate(),
+        active: product.discount?.active ?? false,
+        discountPercent: product.discount?.discountPercent ?? 0,
+        rateAmount: product.rate_amount,
+        totalScore: product.total_score,
       });
     }
     return products;
@@ -35,6 +39,10 @@ export type Output = {
   categories: string[];
   imageUrl: string;
   releasedDate: Date | undefined;
+  discountPercent: number;
+  active: boolean;
+  rateAmount: number;
+  totalScore: number;
 }[];
 
 export const getProductsByCategoryParams = z.object({
