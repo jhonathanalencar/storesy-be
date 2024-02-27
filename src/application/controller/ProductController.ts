@@ -9,4 +9,5 @@ export interface ProductController {
   listBestSellers(request: any, response: any): Promise<void>;
   update(request: any, response: any): Promise<void>;
   release(request: any, response: any): Promise<void>;
+  search(request: any, response: any): Promise<void>;
 }

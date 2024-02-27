@@ -27,6 +27,10 @@ import {
   ListBestSellers,
   listBestSellersQuery,
 } from '../../application/usecase/product/ListBestSellers';
+import {
+  SearchProducts,
+  searchProductsQuery,
+} from '../../application/usecase/product/searchProducts';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -39,7 +43,8 @@ export class ProductControllerHttp implements ProductController {
     private readonly getProductBySlug: GetProductsBySlug,
     private readonly listProductDeals: ListDeals,
     private readonly listRecent: ListMostRecent,
-    private readonly listBestSellersProducts: ListBestSellers
+    private readonly listBestSellersProducts: ListBestSellers,
+    private readonly searchProducts: SearchProducts
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
@@ -101,5 +106,11 @@ export class ProductControllerHttp implements ProductController {
     const { productId } = releaseProductParams.parse(request.params);
     await this.releaseProduct.execute(productId);
     response.status(204).send();
+  }
+
+  async search(request: Request, response: Response): Promise<void> {
+    const { query } = searchProductsQuery.parse(request.query);
+    const output = await this.searchProducts.execute({ query });
+    response.status(200).json(output);
   }
 }

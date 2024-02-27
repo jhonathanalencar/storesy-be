@@ -106,9 +106,15 @@ export class ProductsRepositoryMemory implements ProductsRepository {
     });
   }
 
-  async listBestSellers(ids: string[]): Promise<Product[]> {
+  async listBestSellers(ids: string): Promise<Product[]> {
     return new Promise((resolve) => {
       resolve(this.products.filter((product) => ids.includes(product.productId)));
+    });
+  }
+
+  async search(query: string): Promise<Product[]> {
+    return new Promise((resolve) => {
+      resolve(this.products.filter((product) => product.name.includes(query)));
     });
   }
 }

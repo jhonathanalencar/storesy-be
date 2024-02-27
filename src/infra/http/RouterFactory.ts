@@ -60,6 +60,9 @@ export class RouterFactory {
     router.get('/best-sellers', (request, response) => {
       return this.productController.listBestSellers(request, response);
     });
+    router.get('/search', (request, response) => {
+      return this.productController.search(request, response);
+    });
     return router;
   }
 }
