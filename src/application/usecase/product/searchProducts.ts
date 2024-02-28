@@ -6,8 +6,11 @@ export class SearchProducts {
   constructor(private readonly productsRepository: ProductsRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const products = await this.productsRepository.search(input.query);
-    return products.map((product) => {
+    const [total, productList] = await Promise.all([
+      this.productsRepository.count(input.query),
+      this.productsRepository.search(input.query, input.limit, input.offset),
+    ]);
+    const products = productList.map((product) => {
       return {
         productId: product.productId,
         slug: product.slug,
@@ -23,28 +26,39 @@ export class SearchProducts {
         totalScore: product.total_score,
       };
     });
+    return {
+      total,
+      products,
+    };
   }
 }
 
 type Input = {
   query: string;
+  limit: number;
+  offset: number;
 };
 
 type Output = {
-  productId: string;
-  slug: string;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
-  releasedDate: Date | undefined;
-  discountPercent: number;
-  active: boolean;
-  rateAmount: number;
-  totalScore: number;
-}[];
+  total: number;
+  products: {
+    productId: string;
+    slug: string;
+    name: string;
+    description: string;
+    price: number;
+    quantity: number;
+    imageUrl: string;
+    releasedDate: Date | undefined;
+    discountPercent: number;
+    active: boolean;
+    rateAmount: number;
+    totalScore: number;
+  }[];
+};
 
 export const searchProductsQuery = z.object({
   query: z.string({ required_error: 'query is required' }),
+  page: z.string().optional(),
+  limit: z.string().optional(),
 });

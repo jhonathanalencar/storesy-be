@@ -109,8 +109,9 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async search(request: Request, response: Response): Promise<void> {
-    const { query } = searchProductsQuery.parse(request.query);
-    const output = await this.searchProducts.execute({ query });
+    const { query, page = '1', limit = '10' } = searchProductsQuery.parse(request.query);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const output = await this.searchProducts.execute({ query, limit: parseInt(limit), offset });
     response.status(200).json(output);
   }
 }

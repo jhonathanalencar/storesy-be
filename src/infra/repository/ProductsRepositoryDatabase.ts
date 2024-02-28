@@ -285,11 +285,11 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return products;
   }
 
-  async search(query: string): Promise<Product[]> {
+  async search(query: string, limit: number, offset: number): Promise<Product[]> {
     const productsData: (ProductModel &
       DiscountModel & { rate_amount: string; total_score: string })[] = await this.connection.query(
-      'select p.*, d.discount_percent, d.active, count(pr.product_rate_id) as rate_amount, sum(pr.score) as total_score from lak.product p left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where lower(p.name) like $1 or lower(p.description) like $1 group by p.slug, p.name, p.description, p.summary, p.image_url, p.price, p.created_at, p.updated_at, p.released_date, p.product_id, d.discount_percent, d.active',
-      [`%${query}%`]
+      'select p.*, d.discount_percent, d.active, count(pr.product_rate_id) as rate_amount, sum(pr.score) as total_score from lak.product p left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where lower(p.name) like $1 or lower(p.description) like $1 group by p.slug, p.name, p.description, p.summary, p.image_url, p.price, p.created_at, p.updated_at, p.released_date, p.product_id, d.discount_percent, d.active order by p.product_id limit $2 offset $3',
+      [`%${query}%`, limit, offset]
     );
     const products = productsData.map((productData) => {
       const product = Product.restore(
@@ -321,10 +321,10 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return products;
   }
 
-  async count(): Promise<number> {
+  async count(query: string): Promise<number> {
     const [count]: { total: string }[] = await this.connection.query(
-      'select count(*) as total from lak.product',
-      []
+      'select count(*) as total from lak.product p where lower(p.name) like $1 or lower(p.description) like $1',
+      [`%${query}%`]
     );
     return parseInt(count.total);
   }

@@ -10,6 +10,6 @@ export interface ProductsRepository {
   listDeals(): Promise<Product[]>;
   listMostRecent(): Promise<Product[]>;
   listBestSellers(ids: string): Promise<Product[]>;
-  search(query: string): Promise<Product[]>;
-  count(): Promise<number>;
+  search(query: string, limit: number, offset: number): Promise<Product[]>;
+  count(query: string): Promise<number>;
 }
