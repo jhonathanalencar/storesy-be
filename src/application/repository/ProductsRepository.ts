@@ -11,4 +11,5 @@ export interface ProductsRepository {
   listMostRecent(): Promise<Product[]>;
   listBestSellers(ids: string): Promise<Product[]>;
   search(query: string): Promise<Product[]>;
+  count(): Promise<number>;
 }

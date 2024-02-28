@@ -320,4 +320,12 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     });
     return products;
   }
+
+  async count(): Promise<number> {
+    const [count]: { total: string }[] = await this.connection.query(
+      'select count(*) as total from lak.product',
+      []
+    );
+    return parseInt(count.total);
+  }
 }
