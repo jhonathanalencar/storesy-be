@@ -7,10 +7,11 @@ export interface ProductsRepository {
   getById(id: string): Promise<Product | undefined>;
   getBySlug(slug: string): Promise<Product | undefined>;
   listAll(): Promise<Product[]>;
-  listDeals(): Promise<Product[]>;
+  listDeals(limit: number, offset: number): Promise<Product[]>;
   listMostRecent(): Promise<Product[]>;
   listBestSellers(ids: string): Promise<Product[]>;
   search(query: string, limit: number, offset: number): Promise<Product[]>;
   countSearch(query: string): Promise<number>;
   countCategory(category: string): Promise<number>;
+  countDeals(): Promise<number>;
 }

@@ -22,7 +22,7 @@ import {
   GetProductsBySlug,
   getProductsBySlugParams,
 } from '../../application/usecase/product/GetProductsBySlug';
-import { ListDeals } from '../../application/usecase/product/ListDeals';
+import { ListDeals, listDealsQuery } from '../../application/usecase/product/ListDeals';
 import { ListMostRecent } from '../../application/usecase/product/ListMostRecent';
 import {
   ListBestSellers,
@@ -98,7 +98,9 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async listDeals(request: Request, response: Response): Promise<void> {
-    const output = await this.listProductDeals.execute();
+    const { page = '1', limit = '10' } = listDealsQuery.parse(request.query);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const output = await this.listProductDeals.execute({ limit: parseInt(limit), offset });
     response.status(200).json(output);
   }
 

@@ -210,10 +210,10 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return products;
   }
 
-  async listDeals(): Promise<Product[]> {
+  async listDeals(limit: number, offset: number): Promise<Product[]> {
     const productsData: (ProductModel & DiscountModel)[] = await this.connection.query(
-      'select * from lak.product p inner join lak.discount d on d.discount_id = p.discount_id where d.active = true limit 10',
-      []
+      'select * from lak.product p inner join lak.discount d on d.discount_id = p.discount_id where d.active = true limit $1 offset $2',
+      [limit, offset]
     );
     const products = productsData.map((productData) => {
       return Product.restore(
@@ -333,6 +333,14 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     const [count]: { total: string }[] = await this.connection.query(
       'select count(*) as total from lak.product p inner join lak.category c on c.slug = $1 inner join lak.product_category pc on pc.product_id = p.product_id and pc.category_id = c.category_id',
       [category]
+    );
+    return parseInt(count.total);
+  }
+
+  async countDeals(): Promise<number> {
+    const [count]: { total: string }[] = await this.connection.query(
+      'select count(*) as total from lak.product p inner join lak.discount d on d.discount_id = p.discount_id where d.active = true',
+      []
     );
     return parseInt(count.total);
   }

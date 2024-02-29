@@ -1,11 +1,16 @@
+import { z } from 'zod';
+
 import { ProductsRepository } from '../../repository/ProductsRepository';
 
 export class ListDeals {
   constructor(private readonly productsRepository: ProductsRepository) {}
 
-  async execute(): Promise<Output> {
-    const products = await this.productsRepository.listDeals();
-    return products.map((product) => {
+  async execute(input: Input): Promise<Output> {
+    const [total, productsData] = await Promise.all([
+      this.productsRepository.countDeals(),
+      this.productsRepository.listDeals(input.limit, input.offset),
+    ]);
+    const products = productsData.map((product) => {
       return {
         productId: product.productId,
         slug: product.slug,
@@ -18,17 +23,34 @@ export class ListDeals {
         releasedDate: product.getReleasedDate(),
       };
     });
+    return {
+      total,
+      products,
+    };
   }
 }
 
+export type Input = {
+  limit: number;
+  offset: number;
+};
+
 export type Output = {
-  productId: string;
-  slug: string;
-  name: string;
-  description: string;
-  price: number;
-  categories: string[];
-  imageUrl: string;
-  quantity: number;
-  releasedDate: Date | undefined;
-}[];
+  total: number;
+  products: {
+    productId: string;
+    slug: string;
+    name: string;
+    description: string;
+    price: number;
+    categories: string[];
+    imageUrl: string;
+    quantity: number;
+    releasedDate: Date | undefined;
+  }[];
+};
+
+export const listDealsQuery = z.object({
+  limit: z.string().optional(),
+  page: z.string().optional(),
+});
