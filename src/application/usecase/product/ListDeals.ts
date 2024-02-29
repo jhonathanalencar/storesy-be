@@ -21,6 +21,10 @@ export class ListDeals {
         price: product.price,
         categories: product.categories,
         releasedDate: product.getReleasedDate(),
+        discountPercent: product.discount?.discountPercent ?? 0,
+        active: product.discount?.active ?? false,
+        rateAmount: product.rate_amount,
+        totalScore: product.total_score,
       };
     });
     return {
@@ -47,6 +51,10 @@ export type Output = {
     imageUrl: string;
     quantity: number;
     releasedDate: Date | undefined;
+    discountPercent: number;
+    active: boolean;
+    rateAmount: number;
+    totalScore: number;
   }[];
 };
 

@@ -211,12 +211,13 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
   }
 
   async listDeals(limit: number, offset: number): Promise<Product[]> {
-    const productsData: (ProductModel & DiscountModel)[] = await this.connection.query(
-      'select * from lak.product p inner join lak.discount d on d.discount_id = p.discount_id where d.active = true limit $1 offset $2',
+    const productsData: (ProductModel &
+      DiscountModel & { rate_amount: string; total_score: string })[] = await this.connection.query(
+      'select p.*, d.discount_percent, d.active, count(pr.product_rate_id) as rate_amount, sum(pr.score) as total_score from lak.product p inner join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where d.active = true group by p.slug, p.name, p.description, p.summary, p.image_url, p.price, p.created_at, p.updated_at, p.released_date, p.product_id, d.discount_percent, d.active limit $1 offset $2',
       [limit, offset]
     );
     const products = productsData.map((productData) => {
-      return Product.restore(
+      const product = Product.restore(
         productData.product_id,
         productData.name,
         productData.slug,
@@ -231,6 +232,16 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
         productData.discount_id,
         productData.released_date
       );
+      if (product.discountId) {
+        product.discount = Discount.create(
+          productData.discount_id,
+          productData.discount_percent,
+          productData.active
+        );
+      }
+      product.rate_amount = parseInt(productData.rate_amount);
+      product.total_score = parseInt(productData.total_score);
+      return product;
     });
     return products;
   }
