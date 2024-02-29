@@ -74,10 +74,10 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     );
   }
 
-  async getByCategory(category: string): Promise<Product[]> {
+  async getByCategory(category: string, limit: number, offset: number): Promise<Product[]> {
     const productsData: ProductData[] = await this.connection.query(
-      'select p.*, c.name as category_name, c.category_id, d.discount_percent, d.active, count(pr.product_rate_id) as rate_amount, sum(pr.score) as total_score from lak.product p inner join lak.category c on c.slug = $1 inner join lak.product_category pc on pc.category_id = c.category_id left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where pc.product_id = p.product_id and pc.category_id = c.category_id group by p.slug, p.name, p.description, p.summary, p.image_url, p.price, p.created_at, p.updated_at, p.released_date, p.product_id, c.name, c.category_id, d.discount_percent, d.active',
-      [category]
+      'select p.*, c.name as category_name, c.category_id, d.discount_percent, d.active, count(pr.product_rate_id) as rate_amount, sum(pr.score) as total_score from lak.product p inner join lak.category c on c.slug = $1 inner join lak.product_category pc on pc.category_id = c.category_id left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where pc.product_id = p.product_id and pc.category_id = c.category_id group by p.slug, p.name, p.description, p.summary, p.image_url, p.price, p.created_at, p.updated_at, p.released_date, p.product_id, c.name, c.category_id, d.discount_percent, d.active limit $2 offset $3',
+      [category, limit, offset]
     );
     const products = productsData.map((productData) => {
       const product = Product.restore(
@@ -321,10 +321,18 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return products;
   }
 
-  async count(query: string): Promise<number> {
+  async countSearch(query: string): Promise<number> {
     const [count]: { total: string }[] = await this.connection.query(
       'select count(*) as total from lak.product p where lower(p.name) like $1 or lower(p.description) like $1',
       [`%${query}%`]
+    );
+    return parseInt(count.total);
+  }
+
+  async countCategory(category: string): Promise<number> {
+    const [count]: { total: string }[] = await this.connection.query(
+      'select count(*) as total from lak.product p inner join lak.category c on c.slug = $1 inner join lak.product_category pc on pc.product_id = p.product_id and pc.category_id = c.category_id',
+      [category]
     );
     return parseInt(count.total);
   }

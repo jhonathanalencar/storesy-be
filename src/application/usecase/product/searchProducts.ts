@@ -7,7 +7,7 @@ export class SearchProducts {
 
   async execute(input: Input): Promise<Output> {
     const [total, productList] = await Promise.all([
-      this.productsRepository.count(input.query),
+      this.productsRepository.countSearch(input.query),
       this.productsRepository.search(input.query, input.limit, input.offset),
     ]);
     const products = productList.map((product) => {

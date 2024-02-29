@@ -5,9 +5,12 @@ import { ProductsRepository } from '../../repository/ProductsRepository';
 export class GetProductsByCategory {
   constructor(readonly productsRepository: ProductsRepository) {}
 
-  async execute(category: string): Promise<Output> {
-    const productsData = await this.productsRepository.getByCategory(category);
-    const products: Output = [];
+  async execute(input: Input): Promise<Output> {
+    const [total, productsData] = await Promise.all([
+      this.productsRepository.countCategory(input.category),
+      this.productsRepository.getByCategory(input.category, input.limit, input.offset),
+    ]);
+    const products: Output['products'] = [];
     for (const product of productsData) {
       products.push({
         productId: product.productId,
@@ -25,26 +28,43 @@ export class GetProductsByCategory {
         totalScore: product.total_score,
       });
     }
-    return products;
+    return {
+      total,
+      products,
+    };
   }
 }
 
+type Input = {
+  category: string;
+  limit: number;
+  offset: number;
+};
+
 export type Output = {
-  productId: string;
-  slug: string;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  categories: string[];
-  imageUrl: string;
-  releasedDate: Date | undefined;
-  discountPercent: number;
-  active: boolean;
-  rateAmount: number;
-  totalScore: number;
-}[];
+  total: number;
+  products: {
+    productId: string;
+    slug: string;
+    name: string;
+    description: string;
+    price: number;
+    quantity: number;
+    categories: string[];
+    imageUrl: string;
+    releasedDate: Date | undefined;
+    discountPercent: number;
+    active: boolean;
+    rateAmount: number;
+    totalScore: number;
+  }[];
+};
 
 export const getProductsByCategoryParams = z.object({
   category: z.string({ required_error: 'category is required' }),
+});
+
+export const getProductsByCategoryQuery = z.object({
+  page: z.string().optional(),
+  limit: z.string().optional(),
 });

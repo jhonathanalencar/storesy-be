@@ -6,6 +6,7 @@ import { GetProduct, getProductParams } from '../../application/usecase/product/
 import {
   GetProductsByCategory,
   getProductsByCategoryParams,
+  getProductsByCategoryQuery,
 } from '../../application/usecase/product/GetProductsByCategory';
 import {
   ReleaseProduct,
@@ -61,7 +62,13 @@ export class ProductControllerHttp implements ProductController {
 
   async getByCategory(request: Request, response: Response): Promise<void> {
     const { category } = getProductsByCategoryParams.parse(request.params);
-    const output = await this.getProductsByCategory.execute(category);
+    const { page = '1', limit = '10' } = getProductsByCategoryQuery.parse(request.query);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const output = await this.getProductsByCategory.execute({
+      category,
+      limit: parseInt(limit),
+      offset,
+    });
     response.status(200).json(output);
   }
 
