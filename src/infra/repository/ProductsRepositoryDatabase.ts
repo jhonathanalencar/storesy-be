@@ -122,7 +122,7 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
 
   async getBySlug(slug: string): Promise<Product | undefined> {
     const productsData: ProductData[] = await this.connection.query(
-      'select p.*, c.name as category_name, c.category_id, d.discount_percent, d.active, pr.product_rate_id, pr.score, pr.user_id, pr.created_at as product_rate_created_at, pr.updated_at as product_rate_updated_at, pr.description as product_rate_description from lak.product p inner join lak.product_category pc on pc.product_id = p.product_id inner join lak.category c on pc.category_id = c.category_id left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id where p.slug = $1',
+      'select p.*, c.name as category_name, c.category_id, d.discount_percent, d.active from lak.product p inner join lak.product_category pc on pc.product_id = p.product_id inner join lak.category c on pc.category_id = c.category_id left join lak.discount d on d.discount_id = p.discount_id where p.slug = $1',
       [slug]
     );
     if (productsData.length === 0) return;
@@ -142,16 +142,6 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
       productData.discount_id,
       productData.released_date
     );
-    product.ratings = productData.ratings.map((rate) => {
-      return {
-        content: rate.product_rate_description,
-        rate: rate.score,
-        rateId: rate.product_rate_id,
-        postedAt: rate.posted_at,
-        editedAt: rate.edited_at,
-        userId: rate.user_id,
-      };
-    });
     if (product.discountId) {
       product.discount = Discount.create(
         productData.discount_id,

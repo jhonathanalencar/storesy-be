@@ -11,6 +11,7 @@ export class GetProductsBySlug {
     if (!product) throw new NotFoundError('Product not found');
     return {
       productId: product.productId,
+      slug: product.slug,
       name: product.name,
       description: product.description,
       price: product.price,
@@ -20,22 +21,13 @@ export class GetProductsBySlug {
       releasedDate: product.getReleasedDate(),
       discountPercent: product.discount?.discountPercent ?? 0,
       active: product.discount?.active ?? false,
-      ratings: product.ratings.map((rate) => {
-        return {
-          rateId: rate.rateId,
-          description: rate.content,
-          score: rate.rate,
-          userId: rate.userId,
-          editedAt: rate.editedAt,
-          postedAt: rate.postedAt,
-        };
-      }),
     };
   }
 }
 
 export type Output = {
   productId: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
@@ -45,14 +37,6 @@ export type Output = {
   releasedDate: Date | undefined;
   discountPercent: number;
   active: boolean;
-  ratings: {
-    rateId: string;
-    score: number;
-    description: string;
-    userId: string;
-    postedAt: Date;
-    editedAt: Date;
-  }[];
 };
 
 export const getProductsBySlugParams = z.object({
