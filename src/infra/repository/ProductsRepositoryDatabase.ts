@@ -187,10 +187,10 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return product;
   }
 
-  async getRatings(productId: string, limit: number, offset: number): Promise<Product['ratings']> {
+  async getRatings(slug: string, limit: number, offset: number): Promise<Product['ratings']> {
     const ratingsData: RatingModel[] = await this.connection.query(
-      'select * from lak.product_rate where product_id = $1 limit $2 offset $3',
-      [productId, limit, offset]
+      'select pr.* from lak.product_rate pr inner join lak.product p on p.product_id = pr.product_id where p.slug = $1 limit $2 offset $3',
+      [slug, limit, offset]
     );
     const ratings = ratingsData.map((rating) => {
       return Rate.restore(
@@ -423,10 +423,10 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return parseInt(count.total);
   }
 
-  async countRatings(productId: string): Promise<number> {
+  async countRatings(slug: string): Promise<number> {
     const [count]: { total: string }[] = await this.connection.query(
-      'select count(*) as total from lak.product_rate where product_id = $1',
-      [productId]
+      'select count(*) as total from lak.product_rate pr inner join lak.product p on p.product_id = pr.product_id where p.slug = $1',
+      [slug]
     );
     return parseInt(count.total);
   }

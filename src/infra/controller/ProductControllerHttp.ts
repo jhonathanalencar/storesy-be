@@ -88,10 +88,10 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async getProductRatings(request: Request, response: Response): Promise<void> {
-    const { productId } = getRatingsParams.parse(request.params);
+    const { slug } = getRatingsParams.parse(request.params);
     const { page = '1', limit = '10' } = getRatingsQuery.parse(request.query);
     const offset = (parseInt(page) - 1) * parseInt(limit);
-    const output = await this.getRatings.execute({ productId, limit: parseInt(limit), offset });
+    const output = await this.getRatings.execute({ slug, limit: parseInt(limit), offset });
     response.status(200).json(output);
   }
 

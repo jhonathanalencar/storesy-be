@@ -7,8 +7,8 @@ export class GetRatings {
 
   async execute(input: Input): Promise<Output> {
     const [total, ratingsData] = await Promise.all([
-      this.productsRepository.countRatings(input.productId),
-      this.productsRepository.getRatings(input.productId, input.limit, input.offset),
+      this.productsRepository.countRatings(input.slug),
+      this.productsRepository.getRatings(input.slug, input.limit, input.offset),
     ]);
     const ratings = ratingsData.map((rating) => {
       return {
@@ -28,7 +28,7 @@ export class GetRatings {
 }
 
 export type Input = {
-  productId: string;
+  slug: string;
   limit: number;
   offset: number;
 };
@@ -46,9 +46,7 @@ export type Output = {
 };
 
 export const getRatingsParams = z.object({
-  productId: z
-    .string({ required_error: 'productId is required' })
-    .uuid('productId is not a valid uuid'),
+  slug: z.string({ required_error: 'slug is required' }),
 });
 
 export const getRatingsQuery = z.object({

@@ -6,7 +6,7 @@ export interface ProductsRepository {
   getByCategory(category: string, limit: number, offset: number): Promise<Product[]>;
   getById(id: string): Promise<Product | undefined>;
   getBySlug(slug: string): Promise<Product | undefined>;
-  getRatings(productId: string, limit: number, offset: number): Promise<Product['ratings']>;
+  getRatings(slug: string, limit: number, offset: number): Promise<Product['ratings']>;
   listAll(): Promise<Product[]>;
   listDeals(limit: number, offset: number): Promise<Product[]>;
   listMostRecent(limit: number, offset: number): Promise<Product[]>;
@@ -17,5 +17,5 @@ export interface ProductsRepository {
   countCategory(category: string): Promise<number>;
   countDeals(): Promise<number>;
   countBestSellers(): Promise<number>;
-  countRatings(productId: string): Promise<number>;
+  countRatings(slug: string): Promise<number>;
 }

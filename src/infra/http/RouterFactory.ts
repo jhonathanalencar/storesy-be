@@ -42,9 +42,6 @@ export class RouterFactory {
     router.put('/products/:productId', (request, response) => {
       return this.productController.update(request, response);
     });
-    router.get('/products/:productId/ratings', (request, response) => {
-      return this.productController.getProductRatings(request, response);
-    });
     router.post('/products/:productId/release', (request, response) => {
       return this.productController.release(request, response);
     });
@@ -53,6 +50,9 @@ export class RouterFactory {
     });
     router.get('/slug/:slug/products', (request, response) => {
       return this.productController.getBySlug(request, response);
+    });
+    router.get('/slug/:slug/ratings', (request, response) => {
+      return this.productController.getProductRatings(request, response);
     });
     router.get('/deals', (request, response) => {
       return this.productController.listDeals(request, response);
