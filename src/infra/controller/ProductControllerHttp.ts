@@ -35,6 +35,11 @@ import {
   SearchProducts,
   searchProductsQuery,
 } from '../../application/usecase/product/searchProducts';
+import {
+  GetRatings,
+  getRatingsParams,
+  getRatingsQuery,
+} from '../../application/usecase/product/GetRatings';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -48,7 +53,8 @@ export class ProductControllerHttp implements ProductController {
     private readonly listProductDeals: ListDeals,
     private readonly listRecent: ListMostRecent,
     private readonly listBestSellersProducts: ListBestSellers,
-    private readonly searchProducts: SearchProducts
+    private readonly searchProducts: SearchProducts,
+    private readonly getRatings: GetRatings
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
@@ -78,6 +84,14 @@ export class ProductControllerHttp implements ProductController {
   async getBySlug(request: Request, response: Response): Promise<void> {
     const { slug } = getProductsBySlugParams.parse(request.params);
     const output = await this.getProductBySlug.execute(slug);
+    response.status(200).json(output);
+  }
+
+  async getProductRatings(request: Request, response: Response): Promise<void> {
+    const { productId } = getRatingsParams.parse(request.params);
+    const { page = '1', limit = '10' } = getRatingsQuery.parse(request.query);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const output = await this.getRatings.execute({ productId, limit: parseInt(limit), offset });
     response.status(200).json(output);
   }
 

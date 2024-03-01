@@ -1,5 +1,6 @@
 import { ProductsRepository } from '../../application/repository/ProductsRepository';
 import { Product } from '../../domain/entity/Product';
+import { Rate } from '../../domain/entity/Rate';
 
 export class ProductsRepositoryMemory implements ProductsRepository {
   private products: Product[];
@@ -88,6 +89,14 @@ export class ProductsRepositoryMemory implements ProductsRepository {
     });
   }
 
+  async getRatings(productId: string): Promise<Rate[]> {
+    const foundProduct = this.products.find((product) => product.productId === productId);
+    if (!foundProduct) throw new Error('Product not found!');
+    return new Promise((resolve) => {
+      resolve(foundProduct.ratings);
+    });
+  }
+
   async listAll(): Promise<Product[]> {
     return new Promise((resolve) => {
       resolve(this.products);
@@ -148,6 +157,14 @@ export class ProductsRepositoryMemory implements ProductsRepository {
   async countBestSellers(): Promise<number> {
     return new Promise((resolve) => {
       resolve(this.products.filter((product) => product.ratings.length > 0).length);
+    });
+  }
+
+  async countRatings(productId: string): Promise<number> {
+    const foundProduct = this.products.find((product) => product.productId === productId);
+    if (!foundProduct) throw new Error('Product not found!');
+    return new Promise((resolve) => {
+      resolve(foundProduct.ratings.length);
     });
   }
 }

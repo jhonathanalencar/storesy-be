@@ -1,5 +1,6 @@
 import { ProductsRepository } from '../../application/repository/ProductsRepository';
 import { Discount, Product } from '../../domain/entity/Product';
+import { Rate } from '../../domain/entity/Rate';
 import { ProductModel } from '../../domain/model/ProductModel';
 import { Connection } from '../database/Connection';
 import { formatProductData } from '../helpers/formatProductData';
@@ -23,6 +24,16 @@ export type DiscountModel = {
   discount_id: string;
   discount_percent: number;
   active: boolean;
+};
+
+export type RatingModel = {
+  product_rate_id: string;
+  user_id: string;
+  product_id: string;
+  score: number;
+  description: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export class ProductsRepositoryDatabase implements ProductsRepository {
@@ -174,6 +185,24 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
       productData.released_date
     );
     return product;
+  }
+
+  async getRatings(productId: string, limit: number, offset: number): Promise<Product['ratings']> {
+    const ratingsData: RatingModel[] = await this.connection.query(
+      'select * from lak.product_rate where product_id = $1 limit $2 offset $3',
+      [productId, limit, offset]
+    );
+    const ratings = ratingsData.map((rating) => {
+      return Rate.restore(
+        rating.product_rate_id,
+        rating.user_id,
+        rating.score,
+        rating.description,
+        new Date(rating.created_at),
+        new Date(rating.updated_at)
+      );
+    });
+    return ratings;
   }
 
   async listAll(): Promise<Product[]> {
@@ -390,6 +419,14 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     const [count]: { total: string }[] = await this.connection.query(
       'select count(distinct p.product_id) as total from lak.product p inner join lak.product_rate pr on pr.product_id = p.product_id',
       []
+    );
+    return parseInt(count.total);
+  }
+
+  async countRatings(productId: string): Promise<number> {
+    const [count]: { total: string }[] = await this.connection.query(
+      'select count(*) as total from lak.product_rate where product_id = $1',
+      [productId]
     );
     return parseInt(count.total);
   }

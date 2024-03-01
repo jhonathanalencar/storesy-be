@@ -15,4 +15,15 @@ export class Rate {
     const currentDate = new Date();
     return new Rate(rate_id, userId, rate, content, currentDate, currentDate);
   }
+
+  static restore(
+    rateId: string,
+    userId: string,
+    rate: number,
+    content: string,
+    postedAt: Date,
+    editedAt: Date
+  ) {
+    return new Rate(rateId, userId, rate, content, postedAt, editedAt);
+  }
 }
