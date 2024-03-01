@@ -144,4 +144,10 @@ export class ProductsRepositoryMemory implements ProductsRepository {
       resolve(this.products.filter((product) => product.discount?.active).length);
     });
   }
+
+  async countBestSellers(): Promise<number> {
+    return new Promise((resolve) => {
+      resolve(this.products.filter((product) => product.ratings.length > 0).length);
+    });
+  }
 }

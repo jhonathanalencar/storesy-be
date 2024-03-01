@@ -12,8 +12,8 @@ export class ListBestSellers {
   async execute(input: Input): Promise<Output> {
     const sortedSet: string[] = await this.sortedSet.getSortedSet(
       'products',
-      parseInt(input.start),
-      parseInt(input.stop)
+      input.offset,
+      input.offset + input.limit - 1
     );
     const productIds = sortedSet.reduce((acc, value, index) => {
       if (index % 2 === 0) {
@@ -21,8 +21,11 @@ export class ListBestSellers {
       }
       return acc;
     }, [] as string[]);
-    const products = await this.productsRepository.listBestSellers(productIds.join());
-    return products.map((product) => {
+    const [total, productsData] = await Promise.all([
+      this.productsRepository.countBestSellers(),
+      this.productsRepository.listBestSellers(productIds.join(), input.limit),
+    ]);
+    const products = productsData.map((product) => {
       return {
         productId: product.productId,
         slug: product.slug,
@@ -33,29 +36,44 @@ export class ListBestSellers {
         price: product.price,
         categories: product.categories,
         releasedDate: product.getReleasedDate(),
+        discountPercent: product.discount?.discountPercent ?? 0,
+        active: product.discount?.active ?? false,
+        rateAmount: product.rate_amount,
+        totalScore: product.total_score,
       };
     });
+    return {
+      total,
+      products,
+    };
   }
 }
 
 export type Input = {
-  start: string;
-  stop: string;
+  limit: number;
+  offset: number;
 };
 
 export type Output = {
-  productId: string;
-  slug: string;
-  name: string;
-  description: string;
-  price: number;
-  categories: string[];
-  imageUrl: string;
-  quantity: number;
-  releasedDate: Date | undefined;
-}[];
+  total: number;
+  products: {
+    productId: string;
+    slug: string;
+    name: string;
+    description: string;
+    price: number;
+    categories: string[];
+    imageUrl: string;
+    quantity: number;
+    releasedDate: Date | undefined;
+    discountPercent: number;
+    active: boolean;
+    rateAmount: number;
+    totalScore: number;
+  }[];
+};
 
 export const listBestSellersQuery = z.object({
-  start: z.string({ required_error: 'start is required' }),
-  stop: z.string({ required_error: 'stop is required' }),
+  page: z.string().optional(),
+  limit: z.string().optional(),
 });
