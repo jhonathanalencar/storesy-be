@@ -8,9 +8,10 @@ export interface ProductsRepository {
   getBySlug(slug: string): Promise<Product | undefined>;
   listAll(): Promise<Product[]>;
   listDeals(limit: number, offset: number): Promise<Product[]>;
-  listMostRecent(): Promise<Product[]>;
+  listMostRecent(limit: number, offset: number): Promise<Product[]>;
   listBestSellers(ids: string): Promise<Product[]>;
   search(query: string, limit: number, offset: number): Promise<Product[]>;
+  count(): Promise<number>;
   countSearch(query: string): Promise<number>;
   countCategory(category: string): Promise<number>;
   countDeals(): Promise<number>;

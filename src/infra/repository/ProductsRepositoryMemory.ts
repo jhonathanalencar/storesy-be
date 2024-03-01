@@ -118,6 +118,12 @@ export class ProductsRepositoryMemory implements ProductsRepository {
     });
   }
 
+  async count(): Promise<number> {
+    return new Promise((resolve) => {
+      resolve(this.products.length);
+    });
+  }
+
   async countSearch(query: string): Promise<number> {
     return new Promise((resolve) => {
       resolve(this.products.filter((product) => product.name.includes(query)).length);

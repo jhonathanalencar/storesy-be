@@ -23,7 +23,10 @@ import {
   getProductsBySlugParams,
 } from '../../application/usecase/product/GetProductsBySlug';
 import { ListDeals, listDealsQuery } from '../../application/usecase/product/ListDeals';
-import { ListMostRecent } from '../../application/usecase/product/ListMostRecent';
+import {
+  ListMostRecent,
+  listMostRecentQuery,
+} from '../../application/usecase/product/ListMostRecent';
 import {
   ListBestSellers,
   listBestSellersQuery,
@@ -84,7 +87,9 @@ export class ProductControllerHttp implements ProductController {
   }
 
   async listMostRecent(request: Request, response: Response): Promise<void> {
-    const output = await this.listRecent.execute();
+    const { page = '1', limit = '10' } = listMostRecentQuery.parse(request.query);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const output = await this.listRecent.execute({ limit: parseInt(limit), offset });
     response.status(200).json(output);
   }
 

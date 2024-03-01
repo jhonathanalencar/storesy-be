@@ -246,13 +246,14 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     return products;
   }
 
-  async listMostRecent(): Promise<Product[]> {
-    const productsData: ProductModel[] = await this.connection.query(
-      'select * from lak.product order by released_date desc limit 10',
-      []
+  async listMostRecent(limit: number, offset: number): Promise<Product[]> {
+    const productsData: (ProductModel &
+      DiscountModel & { rate_amount: string; total_score: string })[] = await this.connection.query(
+      'select p.*, d.discount_percent, d.active, count(pr.product_rate_id) as rate_amount, sum(pr.score) as total_score from lak.product p left join lak.discount d on d.discount_id = p.discount_id left join lak.product_rate pr on pr.product_id = p.product_id group by p.slug, p.name, p.description, p.summary, p.image_url, p.price, p.created_at, p.updated_at, p.released_date, p.product_id, d.discount_percent, d.active order by released_date desc limit $1 offset $2',
+      [limit, offset]
     );
     const products = productsData.map((productData) => {
-      return Product.restore(
+      const product = Product.restore(
         productData.product_id,
         productData.name,
         productData.slug,
@@ -267,6 +268,16 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
         productData.discount_id,
         productData.released_date
       );
+      if (product.discountId) {
+        product.discount = Discount.create(
+          productData.discount_id,
+          productData.discount_percent,
+          productData.active
+        );
+      }
+      product.rate_amount = parseInt(productData.rate_amount);
+      product.total_score = parseInt(productData.total_score);
+      return product;
     });
     return products;
   }
@@ -330,6 +341,14 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
       return product;
     });
     return products;
+  }
+
+  async count(): Promise<number> {
+    const [count]: { total: string }[] = await this.connection.query(
+      'select count(*) as total from lak.product',
+      []
+    );
+    return parseInt(count.total);
   }
 
   async countSearch(query: string): Promise<number> {
