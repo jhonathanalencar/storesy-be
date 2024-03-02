@@ -1,46 +1,31 @@
-import { ProductModel } from '../../domain/model/ProductModel';
-import { ProductData } from '../repository/ProductsRepositoryDatabase';
+import { Discount } from '../../domain/entity/Discount';
+import { Product } from '../../domain/entity/Product';
+import type { ProductData } from '../repository/ProductsRepositoryDatabase';
 
-type ProductDataFormatted = ProductModel & {
-  categories: string[];
-  discount_percent: number;
-  active: boolean;
-  ratings: {
-    product_rate_id: string;
-    score: number;
-    product_rate_description: string;
-    user_id: string;
-    posted_at: Date;
-    edited_at: Date;
-  }[];
-};
-
-export function formatProductData(productData: ProductData[]): ProductDataFormatted {
-  const product = productData.reduce((acc, product) => {
-    if (Object.keys(acc).length === 0) {
-      Object.assign(acc, product);
-      Reflect.deleteProperty(acc, 'category_name');
-      Reflect.deleteProperty(acc, 'category_id');
-      acc.categories = [product.category_name];
-      acc.ratings = [];
-    }
-    if (!acc.categories.includes(product.category_name)) {
-      acc.categories.push(product.category_name);
-    }
-    if (
-      product.product_rate_id &&
-      !acc.ratings.find((rate) => rate.product_rate_id === product.product_rate_id)
-    ) {
-      acc.ratings.push({
-        product_rate_id: product.product_rate_id,
-        score: product.score,
-        product_rate_description: product.product_rate_description,
-        edited_at: product.product_rate_updated_at,
-        posted_at: product.product_rate_created_at,
-        user_id: product.user_id,
-      });
-    }
-    return acc;
-  }, {} as ProductDataFormatted);
+export function formatProductData(productData: ProductData): Product {
+  const product = Product.restore(
+    productData.product_id,
+    productData.name,
+    productData.slug,
+    productData.description,
+    productData.summary,
+    parseFloat(productData.price),
+    [],
+    productData.image_url,
+    parseInt(productData.quantity),
+    productData.created_at,
+    productData.updated_at,
+    productData.discount_id,
+    productData.released_date
+  );
+  if (product.discountId) {
+    product.discount = Discount.create(
+      productData.discount_id,
+      productData.discount_percent,
+      productData.active
+    );
+  }
+  product.rateAmount = parseInt(productData.rate_amount ?? 0);
+  product.totalScore = parseInt(productData.total_score ?? 0);
   return product;
 }

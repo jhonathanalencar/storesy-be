@@ -4,11 +4,12 @@ import { ProductsRepository } from '../../repository/ProductsRepository';
 import { NotFoundError } from '../../errors/NotFound';
 
 export class GetProductsBySlug {
-  constructor(readonly productsRepository: ProductsRepository) {}
+  constructor(private readonly productsRepository: ProductsRepository) {}
 
   async execute(slug: string): Promise<Output> {
     const product = await this.productsRepository.getBySlug(slug);
     if (!product) throw new NotFoundError('Product not found');
+    const categories = await this.productsRepository.getCategories(product.productId);
     return {
       productId: product.productId,
       slug: product.slug,
@@ -16,11 +17,13 @@ export class GetProductsBySlug {
       description: product.description,
       price: product.price,
       quantity: product.quantity,
-      categories: product.categories,
+      categories,
       imageUrl: product.imageUrl,
       releasedDate: product.getReleasedDate(),
       discountPercent: product.discount?.discountPercent ?? 0,
       active: product.discount?.active ?? false,
+      rateAmount: product.rateAmount,
+      totalScore: product.totalScore,
     };
   }
 }
@@ -37,6 +40,8 @@ export type Output = {
   releasedDate: Date | undefined;
   discountPercent: number;
   active: boolean;
+  rateAmount: number;
+  totalScore: number;
 };
 
 export const getProductsBySlugParams = z.object({

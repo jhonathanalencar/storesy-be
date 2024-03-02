@@ -23,8 +23,8 @@ export class ListDeals {
         releasedDate: product.getReleasedDate(),
         discountPercent: product.discount?.discountPercent ?? 0,
         active: product.discount?.active ?? false,
-        rateAmount: product.rate_amount,
-        totalScore: product.total_score,
+        rateAmount: product.rateAmount,
+        totalScore: product.totalScore,
       };
     });
     return {

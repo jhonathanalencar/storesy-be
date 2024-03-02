@@ -7,6 +7,7 @@ export interface ProductsRepository {
   getById(id: string): Promise<Product | undefined>;
   getBySlug(slug: string): Promise<Product | undefined>;
   getRatings(slug: string, limit: number, offset: number): Promise<Product['ratings']>;
+  getCategories(id: string): Promise<Product['categories']>;
   listAll(): Promise<Product[]>;
   listDeals(limit: number, offset: number): Promise<Product[]>;
   listMostRecent(limit: number, offset: number): Promise<Product[]>;

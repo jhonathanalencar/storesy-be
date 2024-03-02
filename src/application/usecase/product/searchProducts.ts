@@ -22,8 +22,8 @@ export class SearchProducts {
         releasedDate: product.getReleasedDate(),
         active: product.discount?.active ?? false,
         discountPercent: product.discount?.discountPercent ?? 0,
-        rateAmount: product.rate_amount,
-        totalScore: product.total_score,
+        rateAmount: product.rateAmount,
+        totalScore: product.totalScore,
       };
     });
     return {

@@ -15,6 +15,10 @@ export class ListAllProducts {
         imageUrl: product.imageUrl,
         quantity: product.quantity,
         releasedDate: product.getReleasedDate(),
+        discountPercent: product.discount?.discountPercent ?? 0,
+        active: product.discount?.active ?? false,
+        rateAmount: product.rateAmount,
+        totalScore: product.totalScore,
       };
     });
   }
@@ -30,4 +34,8 @@ export type Output = {
   imageUrl: string;
   quantity: number;
   releasedDate: Date | undefined;
+  discountPercent: number;
+  active: boolean;
+  rateAmount: number;
+  totalScore: number;
 }[];

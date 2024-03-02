@@ -3,16 +3,15 @@ import { z } from 'zod';
 import { ProductsRepository } from '../../repository/ProductsRepository';
 
 export class GetProductsByCategory {
-  constructor(readonly productsRepository: ProductsRepository) {}
+  constructor(private readonly productsRepository: ProductsRepository) {}
 
   async execute(input: Input): Promise<Output> {
     const [total, productsData] = await Promise.all([
       this.productsRepository.countCategory(input.category),
       this.productsRepository.getByCategory(input.category, input.limit, input.offset),
     ]);
-    const products: Output['products'] = [];
-    for (const product of productsData) {
-      products.push({
+    const products = productsData.map((product) => {
+      return {
         productId: product.productId,
         slug: product.slug,
         name: product.name,
@@ -24,10 +23,10 @@ export class GetProductsByCategory {
         releasedDate: product.getReleasedDate(),
         active: product.discount?.active ?? false,
         discountPercent: product.discount?.discountPercent ?? 0,
-        rateAmount: product.rate_amount,
-        totalScore: product.total_score,
-      });
-    }
+        rateAmount: product.rateAmount,
+        totalScore: product.totalScore,
+      };
+    });
     return {
       total,
       products,

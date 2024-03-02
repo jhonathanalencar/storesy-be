@@ -1,24 +1,13 @@
 import crypto from 'node:crypto';
 
 import { Rate } from './Rate';
-
-export class Discount {
-  constructor(
-    readonly discountId: string,
-    readonly discountPercent: number,
-    readonly active: boolean
-  ) {}
-
-  static create(discountId: string, discountPercent: number, active: boolean) {
-    return new Discount(discountId, discountPercent, active);
-  }
-}
+import { Discount } from './Discount';
 
 export class Product {
   ratings: Rate[];
   discount: Discount | null;
-  rate_amount: number;
-  total_score: number;
+  rateAmount: number;
+  totalScore: number;
 
   constructor(
     readonly productId: string,

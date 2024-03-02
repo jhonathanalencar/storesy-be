@@ -97,6 +97,18 @@ export class ProductsRepositoryMemory implements ProductsRepository {
     });
   }
 
+  async getCategories(id: string): Promise<string[]> {
+    const categories: string[] = [];
+    this.products.forEach((product) => {
+      if (product.productId === id) {
+        categories.concat(product.categories);
+      }
+    });
+    return new Promise((resolve) => {
+      resolve(categories);
+    });
+  }
+
   async listAll(): Promise<Product[]> {
     return new Promise((resolve) => {
       resolve(this.products);
