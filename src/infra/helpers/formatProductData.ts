@@ -13,10 +13,10 @@ export function formatProductData(productData: ProductData): Product {
     [],
     productData.image_url,
     parseInt(productData.quantity),
-    productData.created_at,
-    productData.updated_at,
+    new Date(productData.created_at),
+    new Date(productData.updated_at),
     productData.discount_id,
-    productData.released_date
+    new Date(productData.released_date)
   );
   if (product.discountId) {
     product.discount = Discount.create(

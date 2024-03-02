@@ -1,4 +1,4 @@
-export interface ProductModel {
+export type ProductModel = {
   product_id: string;
   name: string;
   slug: string;
@@ -8,7 +8,7 @@ export interface ProductModel {
   image_url: string;
   discount_id: string;
   quantity: string;
-  created_at: Date;
-  updated_at: Date;
-  released_date: Date;
-}
+  created_at: string;
+  updated_at: string;
+  released_date: string;
+};
