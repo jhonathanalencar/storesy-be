@@ -104,7 +104,7 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
 
   async getRatings(slug: string, limit: number, offset: number): Promise<Product['ratings']> {
     const ratingsData: RateModel[] = await this.connection.query(
-      'select pr.* from lak.product_rate pr inner join lak.product p on p.product_id = pr.product_id where p.slug = $1 limit $2 offset $3',
+      'select pr.* from lak.product_rate pr inner join lak.product p on p.product_id = pr.product_id where p.slug = $1 order by pr.created_at desc limit $2 offset $3',
       [slug, limit, offset]
     );
     const ratings = ratingsData.map((rating) => {
