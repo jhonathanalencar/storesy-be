@@ -48,6 +48,13 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     ]);
   }
 
+  async createRating(productId: string, rate: Rate): Promise<void> {
+    await this.connection.query(
+      'insert into lak.product_rate (product_rate_id, user_id, product_id, score, description) values ($1, $2, $3, $4, $5)',
+      [rate.rateId, rate.userId, productId, rate.rate, rate.content]
+    );
+  }
+
   async update(product: Product): Promise<void> {
     await this.connection.query(
       'update lak.product set (name, slug, description, summary, price, image_url, discount_id, quantity, released_date) = ($1, $2, $3, $4, $5, $6, $7, $8, $9) where product_id = $10',

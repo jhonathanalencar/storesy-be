@@ -1,7 +1,9 @@
 import { Product } from '../../domain/entity/Product';
+import { Rate } from '../../domain/entity/Rate';
 
 export interface ProductsRepository {
   save(product: Product): Promise<void>;
+  createRating(productId: string, rate: Rate): Promise<void>;
   update(product: Product): Promise<void>;
   updateQuantity(product: Product): Promise<void>;
   getByCategory(category: string, limit: number, offset: number): Promise<Product[]>;

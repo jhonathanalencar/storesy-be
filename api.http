@@ -1,11 +1,11 @@
 @category = headphones
 
 # @name getProductsByCategory
-GET http://localhost:3333/api/products/category/{{category}}
+GET http://localhost:3333/api/category/{{category}}/products
 
 ###
 
-@productId = {{getProductsByCategory.response.body.$[0].productId}}
+@productId = {{getProductsByCategory.response.body.products.$[0].productId}}
 
 # @name getProductById
 GET http://localhost:3333/api/products/{{productId}}
@@ -30,6 +30,18 @@ Content-Type: application/json
 
 # @name releaseProduct
 POST http://localhost:3333/api/products/4cac7bb2-6cb5-43e6-bfee-1f0ab4e3ae92/release
+
+###
+
+# @name createRating
+POST http://localhost:3333/api/products/{{productId}}/rating
+Content-Type: application/json
+Authorization: Bearer ce4702fb-ae6e-4b5f-b502-916230d0654a
+
+{
+  "score": 4,
+  "description": "cool stuff"
+}
 
 ###
 

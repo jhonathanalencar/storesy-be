@@ -28,6 +28,7 @@ import { UserControllerHttp } from './infra/controller/UserControllerHttp';
 import { SearchProducts } from './application/usecase/product/searchProducts';
 import { GetRatings } from './application/usecase/product/GetRatings';
 import { UpdateProductQuantity } from './application/usecase/product/UpdateQuantity';
+import { CreateRating } from './application/usecase/product/CreateRating';
 
 LoadEnv.load();
 const connection = new PgPromiseAdapter();
@@ -46,6 +47,7 @@ const listBestSellers = new ListBestSellers(productsRepository, redis);
 const searchProducts = new SearchProducts(productsRepository);
 const getRatings = new GetRatings(productsRepository);
 const updateProductQuantity = new UpdateProductQuantity(productsRepository);
+const createRating = new CreateRating(productsRepository, redis);
 const productController = new ProductControllerHttp(
   getProductsByCategory,
   getProduct,
@@ -59,7 +61,8 @@ const productController = new ProductControllerHttp(
   listBestSellers,
   searchProducts,
   getRatings,
-  updateProductQuantity
+  updateProductQuantity,
+  createRating
 );
 const categoryRepository = new CategoryRepositoryDatabase(connection);
 const createCategory = new CreateCategory(categoryRepository);

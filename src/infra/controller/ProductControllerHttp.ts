@@ -45,6 +45,13 @@ import {
   updateProductQuantityBody,
   updateProductQuantityParams,
 } from '../../application/usecase/product/UpdateQuantity';
+import {
+  CreateRating,
+  createRatingBody,
+  createRatingHeaders,
+  createRatingParams,
+} from '../../application/usecase/product/CreateRating';
+import { UnauthenticatedError } from '../../application/errors/Unauthenticated';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -60,12 +67,31 @@ export class ProductControllerHttp implements ProductController {
     private readonly listBestSellersProducts: ListBestSellers,
     private readonly searchProducts: SearchProducts,
     private readonly getRatings: GetRatings,
-    private readonly updateProductQuantity: UpdateProductQuantity
+    private readonly updateProductQuantity: UpdateProductQuantity,
+    private readonly createProductRating: CreateRating
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
     const body = createProductBody.parse(request.body);
     const output = await this.addProduct.execute(body);
+    response.status(201).json(output);
+  }
+
+  async createRating(request: Request, response: Response): Promise<void> {
+    const { authorization } = createRatingHeaders.parse(request.headers);
+    if (!authorization.startsWith('Bearer ')) {
+      throw new UnauthenticatedError('Unauthorized');
+    }
+    const userId = authorization.split(' ')?.[1];
+    if (!userId) throw new UnauthenticatedError('Unauthorized');
+    const { productId } = createRatingParams.parse(request.params);
+    const body = createRatingBody.parse(request.body);
+    const output = await this.createProductRating.execute({
+      productId,
+      userId,
+      description: body.description,
+      score: body.score,
+    });
     response.status(201).json(output);
   }
 

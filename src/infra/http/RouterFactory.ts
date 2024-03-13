@@ -48,6 +48,9 @@ export class RouterFactory {
     router.post('/products/:productId/release', (request, response) => {
       return this.productController.release(request, response);
     });
+    router.post('/products/:productId/rating', (request, response) => {
+      return this.productController.createRating(request, response);
+    });
     router.get('/category/:category/products', (request, response) => {
       return this.productController.getByCategory(request, response);
     });
