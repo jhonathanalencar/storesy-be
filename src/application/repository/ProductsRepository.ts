@@ -3,6 +3,7 @@ import { Product } from '../../domain/entity/Product';
 export interface ProductsRepository {
   save(product: Product): Promise<void>;
   update(product: Product): Promise<void>;
+  updateQuantity(product: Product): Promise<void>;
   getByCategory(category: string, limit: number, offset: number): Promise<Product[]>;
   getById(id: string): Promise<Product | undefined>;
   getBySlug(slug: string): Promise<Product | undefined>;

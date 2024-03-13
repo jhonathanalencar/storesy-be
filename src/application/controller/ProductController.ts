@@ -9,6 +9,7 @@ export interface ProductController {
   listMostRecent(request: any, response: any): Promise<void>;
   listBestSellers(request: any, response: any): Promise<void>;
   update(request: any, response: any): Promise<void>;
+  updateQuantity(request: any, response: any): Promise<void>;
   release(request: any, response: any): Promise<void>;
   search(request: any, response: any): Promise<void>;
 }

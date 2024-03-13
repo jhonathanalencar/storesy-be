@@ -57,6 +57,19 @@ export class ProductsRepositoryMemory implements ProductsRepository {
     });
   }
 
+  async updateQuantity(product: Product): Promise<void> {
+    const newProducts = this.products.map((productData) => {
+      if (productData.productId === product.productId) {
+        return product;
+      }
+      return productData;
+    });
+    return new Promise((resolve) => {
+      this.products = newProducts;
+      resolve();
+    });
+  }
+
   async getByCategory(category: string): Promise<Product[]> {
     const filteredProducts = this.products.filter((product) =>
       product.categories.includes(category)

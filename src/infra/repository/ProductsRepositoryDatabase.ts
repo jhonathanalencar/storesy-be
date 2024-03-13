@@ -66,6 +66,13 @@ export class ProductsRepositoryDatabase implements ProductsRepository {
     );
   }
 
+  async updateQuantity(product: Product): Promise<void> {
+    await this.connection.query('update lak.product set quantity = $1 where product_id = $2', [
+      product.quantity,
+      product.productId,
+    ]);
+  }
+
   async getByCategory(category: string, limit: number, offset: number): Promise<Product[]> {
     const [productsData, [categoryData]]: [ProductData[], CategoryModel[]] = await Promise.all([
       this.connection.query(

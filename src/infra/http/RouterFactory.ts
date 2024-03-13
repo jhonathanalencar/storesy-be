@@ -42,6 +42,9 @@ export class RouterFactory {
     router.put('/products/:productId', (request, response) => {
       return this.productController.update(request, response);
     });
+    router.patch('/products/:productId/decrease', (request, response) => {
+      return this.productController.updateQuantity(request, response);
+    });
     router.post('/products/:productId/release', (request, response) => {
       return this.productController.release(request, response);
     });

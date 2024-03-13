@@ -40,6 +40,11 @@ import {
   getRatingsParams,
   getRatingsQuery,
 } from '../../application/usecase/product/GetRatings';
+import {
+  UpdateProductQuantity,
+  updateProductQuantityBody,
+  updateProductQuantityParams,
+} from '../../application/usecase/product/UpdateQuantity';
 
 export class ProductControllerHttp implements ProductController {
   constructor(
@@ -54,7 +59,8 @@ export class ProductControllerHttp implements ProductController {
     private readonly listRecent: ListMostRecent,
     private readonly listBestSellersProducts: ListBestSellers,
     private readonly searchProducts: SearchProducts,
-    private readonly getRatings: GetRatings
+    private readonly getRatings: GetRatings,
+    private readonly updateProductQuantity: UpdateProductQuantity
   ) {}
 
   async create(request: Request, response: Response): Promise<void> {
@@ -142,5 +148,12 @@ export class ProductControllerHttp implements ProductController {
     const offset = (parseInt(page) - 1) * parseInt(limit);
     const output = await this.searchProducts.execute({ query, limit: parseInt(limit), offset });
     response.status(200).json(output);
+  }
+
+  async updateQuantity(request: Request, response: Response): Promise<void> {
+    const { productId } = updateProductQuantityParams.parse(request.params);
+    const body = updateProductQuantityBody.parse(request.body);
+    await this.updateProductQuantity.execute({ productId, quantity: body.quantity });
+    response.status(204).send();
   }
 }
