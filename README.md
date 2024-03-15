@@ -52,81 +52,81 @@ acesse <http://localhost:3333>
 
 ### Product
 
-#### GET `/products`
+- [x] GET `/products`
 
-List products
+  List products
 
-#### POST `/products`
+- [x] POST `/products`
 
-Create product
+  Create product
 
-#### GET `/products/:productId`
+- [x] GET `/products/:productId`
 
-Get product by ID
+  Get product by ID
 
-#### PUT `/products/:productId`
+- [x] PUT `/products/:productId`
 
-Update product
+  Update product
 
-#### PATCH `/products/:productId/decrease`
+- [x] PATCH `/products/:productId/decrease`
 
-Decrease product quantity
+  Decrease product quantity
 
-#### POST `/products/:productId/release`
+- [x] POST `/products/:productId/release`
 
-Release product
+  Release product
 
-#### POST `/products/:productId/rating`
+- [x] POST `/products/:productId/rating`
 
-Create product rating
+  Create product rating
 
-#### GET `/category/:category/products`
+- [x] GET `/category/:category/products`
 
-Get products by category
+  Get products by category
 
-#### GET `/slug/:slug/products`
+- [x] GET `/slug/:slug/products`
 
-Get product by slug
+  Get product by slug
 
-#### GET `/slug/:slug/ratings`
+- [x] GET `/slug/:slug/ratings`
 
-Get product ratings
+  Get product ratings
 
-#### GET `/deals`
+- [x] GET `/deals`
 
-List deals
+  List deals
 
-#### GET `/best-sellers`
+- [x] GET `/best-sellers`
 
-List best sellers
+  List best sellers
 
-#### GET `/search`
+- [x] GET `/search`
 
-Search products
+  Search products
 
 ### Category
 
-#### GET `/category`
+- [x] GET `/category`
 
-List categories
+  List categories
 
-#### POST `/category`
+- [x] POST `/category`
 
-Create category
+  Create category
 
-#### GET `/category/:categoryId`
+- [x] GET `/category/:categoryId`
 
-Get category by ID
+  Get category by ID
 
-#### PUT `/category/:categoryId`
+- [x] PUT `/category/:categoryId`
 
-Update category
+  Update category
 
 ### User
 
-#### GET `/user/:userId`
+- [x] GET `/user/:userId`
 
-Get user by ID
+  Get user by ID
 
 ## 📝 Licença
 
